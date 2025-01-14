@@ -4,6 +4,14 @@ export interface ChargingInfo {
   available: number;
 }
 
+export type ParkingSpotStatus = "OCCUPIED" | "EMPTY" | "RESERVED";
+
+export interface ParkingSpot {
+  id: string;
+  number: number;
+  status: ParkingSpotStatus;
+}
+
 export interface ParkingLot {
   name: string;
   id: string;
@@ -15,6 +23,7 @@ export interface ParkingLot {
     slowCharging: ChargingInfo;
     fastCharging: ChargingInfo;
   };
+  parkingSpots: ParkingSpot[];
 }
 
 export type ChargingStatus = "AVAILABLE" | "UNAVAILABLE" | "CHARGING";
