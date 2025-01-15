@@ -1,6 +1,14 @@
 import { IParkingLot } from "../types/parking";
 import { IReservation } from "../types/parking";
 
+export const PARKING_LOT_ID = "1";
+export const currentUser = {
+  id: "kevin1",
+  name: "이강식",
+  email: "kangsik.kevin.lee@example.com",
+  phoneNumber: "010-1234-5678",
+};
+
 export const exampleParkingLot: IParkingLot = {
   name: "서울시청 주차장",
   id: "1",
