@@ -7,21 +7,3 @@ export async function fetchParkingLot(id: string): Promise<IParkingLot> {
   }
   return response.json();
 }
-
-export async function reserveSpot(
-  parkingSpotNumber: number,
-  startTime: string,
-  endTime: string
-): Promise<void> {
-  const response = await fetch(`/api/reserve`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ parkingSpotNumber, startTime, endTime }),
-  });
-
-  if (!response.ok) {
-    throw new Error("주차 예약에 실패했습니다.");
-  }
-}
