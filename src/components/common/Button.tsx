@@ -8,6 +8,7 @@ interface ButtonProps {
   children?: React.ReactNode;
   disabled?: boolean;
   className?: string;
+  onClick?: () => void;
 }
 
 const typeStyles: Record<ButtonType, string> = {
@@ -16,12 +17,13 @@ const typeStyles: Record<ButtonType, string> = {
   danger: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-200",
 };
 
-export function Button({
+function Button({
   type = "primary",
   isLoading = false,
   children,
   disabled,
   className = "",
+  onClick,
   ...props
 }: ButtonProps) {
   return (
@@ -35,6 +37,7 @@ export function Button({
         ${typeStyles[type]}
         ${className}
       `}
+      onClick={onClick}
       disabled={disabled || isLoading}
       {...props}
     >
@@ -43,3 +46,5 @@ export function Button({
     </button>
   );
 }
+
+export default Button;

@@ -9,7 +9,7 @@ interface SidebarProps {
   children: React.ReactNode;
 }
 
-export function Sidebar({
+function Sidebar({
   isOpen,
   onClose,
   position = "right",
@@ -64,3 +64,5 @@ export function Sidebar({
 
   return createPortal(content, document.body);
 }
+
+export default Sidebar;
