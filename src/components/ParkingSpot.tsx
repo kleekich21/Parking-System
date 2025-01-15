@@ -41,7 +41,7 @@ const getStatusText = (status: ParkingSpotStatus) => {
   }
 };
 
-const getTypeIcon = (type: IParkingSpot["type"]) => {
+const getTypeIcon = (type: IParkingSpot["parkingSpotType"]) => {
   switch (type) {
     case "DISABLED":
       return <FaWheelchair className="text-blue-600" />;
@@ -68,8 +68,10 @@ export function ParkingSpot({ spot, onSelect }: ParkingSpotProps) {
       `}
       onClick={() => onSelect?.(spot)}
     >
-      <div className="absolute top-2 right-2">{getTypeIcon(spot.type)}</div>
-      <div className="text-2xl font-bold mb-2">#{spot.number}</div>
+      <div className="absolute top-2 right-2">
+        {getTypeIcon(spot.parkingSpotType)}
+      </div>
+      <div className="text-2xl font-bold mb-2">#{spot.parkingSpotNumber}</div>
       <div className="text-sm">{getStatusText(spot.status)}</div>
       {spot.evCharger && (
         <div className="mt-2 text-xs text-gray-600">

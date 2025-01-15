@@ -12,13 +12,13 @@ export function useReserveSpot() {
   });
 }
 
-export function useReservation({
+export function useReservationDetail({
   parkingSpotNumber,
 }: {
   parkingSpotNumber: number;
 }) {
   return useQuery({
-    queryKey: QUERY_KEYS.RESERVATION.PARKING_SPOT(parkingSpotNumber),
+    queryKey: QUERY_KEYS.RESERVATION.DETAIL(parkingSpotNumber),
     queryFn: () => fetchReservation(parkingSpotNumber),
   });
 }

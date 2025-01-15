@@ -5,7 +5,7 @@ export const QUERY_KEYS = {
   },
   RESERVATION: {
     ALL: ["reservations"] as const,
-    PARKING_SPOT: (parkingSpotNumber: number) =>
+    DETAIL: (parkingSpotNumber: number) =>
       ["reservations", parkingSpotNumber] as const,
   },
 } as const;
