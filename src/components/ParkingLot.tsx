@@ -2,11 +2,13 @@ import { IParkingSpot } from "../types/parking";
 import { ParkingSpot } from "./ParkingSpot";
 
 interface ParkingLotProps {
-  spots: IParkingSpot[];
+  spots?: IParkingSpot[];
   onSpotSelect?: (spot: IParkingSpot) => void;
 }
 
 export function ParkingLot({ spots, onSpotSelect }: ParkingLotProps) {
+  if (!spots) return null;
+
   return (
     <div className="relative">
       <div className="grid grid-cols-3 gap-4">
