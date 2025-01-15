@@ -1,9 +1,9 @@
 import { http, HttpResponse, delay } from "msw";
-import { ParkingLot, Reservation } from "../types/parking";
+import { IParkingLot, IReservation } from "../types/parking";
 
 const ARTIFICIAL_DELAY_MS = 1000;
 
-const exampleParkingLot: ParkingLot = {
+const exampleParkingLot: IParkingLot = {
   name: "서울시청 주차장",
   id: "1",
   address: "서울특별시 중구 세종대로 110",
@@ -141,7 +141,7 @@ const exampleParkingLot: ParkingLot = {
   ],
 };
 
-const reservations: Reservation[] = [
+const reservations: IReservation[] = [
   {
     id: "r1",
     parkingSpotId: "5",
@@ -244,7 +244,7 @@ export const handlers = [
     };
 
     // 새로운 예약 생성
-    const newReservation: Reservation = {
+    const newReservation: IReservation = {
       id: `r${Date.now()}`,
       parkingSpotId: parkingSpotNumber.toString(),
       parkingSpotNumber,
