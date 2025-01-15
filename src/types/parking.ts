@@ -39,7 +39,8 @@ export interface IParkingLot {
   totalParkingSpots: number;
   availableParkingSpots: number;
   evCharging: {
-    isAvailable: boolean;
+    total: number;
+    available: number;
     slowCharging: IChargingInfo;
     fastCharging: IChargingInfo;
   };
