@@ -1,14 +1,20 @@
-export interface ChargingInfo {
+export interface IChargingInfo {
   total: number;
   available: number;
 }
 
 export type ParkingSpotStatus = "OCCUPIED" | "EMPTY" | "RESERVED";
+export type ParkingSpotType =
+  | "NORMAL"
+  | "DISABLED"
+  | "EV"
+  | "WOMEN"
+  | "ELDERLY";
 export type ChargingStatus = "AVAILABLE" | "UNAVAILABLE" | "CHARGING";
 export type ChargingSpeed = "SLOW" | "FAST";
 export type ChargingType = "DC_DEMO" | "AC" | "DC_COMBO" | "AC3";
 
-export interface EVCharger {
+export interface IEVCharger {
   operator: string;
   status: ChargingStatus;
   chargingSpeed: ChargingSpeed;
@@ -18,14 +24,15 @@ export interface EVCharger {
   lastUpdated: string;
 }
 
-export interface ParkingSpot {
+export interface IParkingSpot {
   id: string;
   number: number;
   status: ParkingSpotStatus;
-  evCharger?: EVCharger;
+  type: ParkingSpotType;
+  evCharger?: IEVCharger;
 }
 
-export interface ParkingLot {
+export interface IParkingLot {
   name: string;
   id: string;
   address: string;
@@ -33,13 +40,13 @@ export interface ParkingLot {
   availableParkingSpots: number;
   evCharging: {
     isAvailable: boolean;
-    slowCharging: ChargingInfo;
-    fastCharging: ChargingInfo;
+    slowCharging: IChargingInfo;
+    fastCharging: IChargingInfo;
   };
-  parkingSpots: ParkingSpot[];
+  parkingSpots: IParkingSpot[];
 }
 
-export interface Reservation {
+export interface IReservation {
   id: string;
   parkingSpotId: string;
   parkingSpotNumber: number;

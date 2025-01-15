@@ -25,26 +25,31 @@ const exampleParkingLot: ParkingLot = {
       id: "1",
       number: 1,
       status: "OCCUPIED",
+      type: "NORMAL",
     },
     {
       id: "2",
       number: 2,
       status: "EMPTY",
+      type: "DISABLED",
     },
     {
       id: "3",
       number: 3,
       status: "RESERVED",
+      type: "WOMEN",
     },
     {
       id: "4",
       number: 4,
       status: "EMPTY",
+      type: "ELDERLY",
     },
     {
       id: "5",
       number: 5,
       status: "OCCUPIED",
+      type: "EV",
       evCharger: {
         operator: "VOLT_UP",
         status: "CHARGING",
@@ -59,6 +64,7 @@ const exampleParkingLot: ParkingLot = {
       id: "6",
       number: 6,
       status: "EMPTY",
+      type: "EV",
       evCharger: {
         operator: "VOLT_UP",
         status: "AVAILABLE",
@@ -68,6 +74,69 @@ const exampleParkingLot: ParkingLot = {
         pricePerKWh: 450,
         lastUpdated: "2025-01-13T14:30:00+09:00",
       },
+    },
+    {
+      id: "7",
+      number: 7,
+      status: "EMPTY",
+      type: "NORMAL",
+    },
+    {
+      id: "8",
+      number: 8,
+      status: "RESERVED",
+      type: "DISABLED",
+    },
+    {
+      id: "9",
+      number: 9,
+      status: "EMPTY",
+      type: "WOMEN",
+    },
+    {
+      id: "10",
+      number: 10,
+      status: "OCCUPIED",
+      type: "ELDERLY",
+    },
+    {
+      id: "11",
+      number: 11,
+      status: "EMPTY",
+      type: "NORMAL",
+    },
+    {
+      id: "12",
+      number: 12,
+      status: "OCCUPIED",
+      type: "WOMEN",
+    },
+    {
+      id: "13",
+      number: 13,
+      status: "EMPTY",
+      type: "EV",
+      evCharger: {
+        operator: "VOLT_UP",
+        status: "AVAILABLE",
+        chargingSpeed: "SLOW",
+        chargingType: "AC",
+        chargingPower: 20,
+        pricePerKWh: 150,
+        lastUpdated: "2025-01-13T14:30:00+09:00",
+      },
+    },
+    {
+      id: "14",
+      number: 14,
+      status: "RESERVED",
+      type: "ELDERLY",
+    },
+    {
+      id: "15",
+      number: 15,
+      status: "EMPTY",
+      type: "DISABLED",
     },
   ],
 };
@@ -122,6 +191,25 @@ export const handlers = [
 
     return HttpResponse.json(
       { error: "Reservation not found" },
+      { status: 404 }
+    );
+  }),
+
+  // 특정 주차면의 현재 활성화된 예약 조회 API
+  http.get("/api/reservations/spot/:spotNumber/active", async ({ params }) => {
+    await delay(ARTIFICIAL_DELAY_MS);
+    const spotNumber = Number(params.spotNumber);
+
+    const activeReservation = reservations.find(
+      (r) => r.parkingSpotNumber === spotNumber && r.status === "ACTIVE"
+    );
+
+    if (activeReservation) {
+      return HttpResponse.json(activeReservation);
+    }
+
+    return HttpResponse.json(
+      { error: "No active reservation found for this parking spot" },
       { status: 404 }
     );
   }),
