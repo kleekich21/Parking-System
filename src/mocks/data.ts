@@ -43,7 +43,7 @@ export const exampleParkingLot: IParkingLot = {
     {
       id: "3",
       parkingSpotNumber: 3,
-      status: "OCCUPIED",
+      status: "RESERVED",
       parkingSpotType: "DISABLED",
     },
     {
@@ -207,19 +207,19 @@ export const exampleParkingLot: IParkingLot = {
 
 export const reservations: IReservation[] = [
   {
-    id: "r1",
+    id: "r1736958540821",
     reservedBy: "kevin1",
-    parkingSpotId: "5",
-    parkingSpotNumber: 5,
+    parkingSpotId: "3",
+    parkingSpotNumber: 3,
     startTime: "2024-01-13T10:00:00+09:00",
     endTime: "2024-01-13T12:00:00+09:00",
     status: "COMPLETED",
   },
   {
-    id: "r2",
+    id: "r1736958623552",
     reservedBy: "someone",
-    parkingSpotId: "3",
-    parkingSpotNumber: 3,
+    parkingSpotId: "9",
+    parkingSpotNumber: 9,
     startTime: "2024-01-13T14:00:00+09:00",
     endTime: "2024-01-13T16:00:00+09:00",
     status: "ACTIVE",
