@@ -102,7 +102,13 @@ export const handlers = [
       status: "ACTIVE",
     };
 
+    // 예약 내역 업데이트
     reservations.push(newReservation);
+
+    // 주차면 상태 업데이트
+    exampleParkingLot.parkingSpots.find(
+      (spot) => spot.parkingSpotNumber === parkingSpotNumber
+    )!.status = "RESERVED";
 
     return HttpResponse.json({
       success: true,
