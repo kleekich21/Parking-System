@@ -23,10 +23,12 @@ export const handlers = [
   }),
 
   // 특정 예약 조회 API
-  http.get("/api/reservations/:id", async ({ params }) => {
+  http.get("/api/reservations/:parkingSpotNumber", async ({ params }) => {
     await delay(ARTIFICIAL_DELAY_MS);
-    const { id } = params;
-    const reservation = reservations.find((r) => r.id === id);
+    const { parkingSpotNumber } = params;
+    const reservation = reservations.find(
+      (r) => r.parkingSpotNumber === Number(parkingSpotNumber)
+    );
 
     if (reservation) {
       return HttpResponse.json(reservation);
@@ -92,6 +94,7 @@ export const handlers = [
     // 새로운 예약 생성
     const newReservation: IReservation = {
       id: `r${Date.now()}`,
+      reservedBy: "kevin1",
       parkingSpotId: parkingSpotNumber.toString(),
       parkingSpotNumber,
       startTime,

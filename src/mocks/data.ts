@@ -30,27 +30,27 @@ export const exampleParkingLot: IParkingLot = {
   parkingSpots: [
     {
       id: "1",
-      number: 1,
+      parkingSpotNumber: 1,
       status: "EMPTY",
-      type: "DISABLED",
+      parkingSpotType: "DISABLED",
     },
     {
       id: "2",
-      number: 2,
+      parkingSpotNumber: 2,
       status: "EMPTY",
-      type: "DISABLED",
+      parkingSpotType: "DISABLED",
     },
     {
       id: "3",
-      number: 3,
+      parkingSpotNumber: 3,
       status: "OCCUPIED",
-      type: "DISABLED",
+      parkingSpotType: "DISABLED",
     },
     {
       id: "4",
-      number: 4,
+      parkingSpotNumber: 4,
       status: "EMPTY",
-      type: "EV",
+      parkingSpotType: "EV",
       evCharger: {
         operator: "VOLT_UP",
         status: "CHARGING",
@@ -63,9 +63,9 @@ export const exampleParkingLot: IParkingLot = {
     },
     {
       id: "5",
-      number: 5,
+      parkingSpotNumber: 5,
       status: "EMPTY",
-      type: "EV",
+      parkingSpotType: "EV",
       evCharger: {
         operator: "VOLT_UP",
         status: "CHARGING",
@@ -78,9 +78,9 @@ export const exampleParkingLot: IParkingLot = {
     },
     {
       id: "6",
-      number: 6,
+      parkingSpotNumber: 6,
       status: "OCCUPIED",
-      type: "EV",
+      parkingSpotType: "EV",
       evCharger: {
         operator: "VOLT_UP",
         status: "CHARGING",
@@ -93,9 +93,9 @@ export const exampleParkingLot: IParkingLot = {
     },
     {
       id: "7",
-      number: 7,
+      parkingSpotNumber: 7,
       status: "EMPTY",
-      type: "EV",
+      parkingSpotType: "EV",
       evCharger: {
         operator: "VOLT_UP",
         status: "AVAILABLE",
@@ -108,9 +108,9 @@ export const exampleParkingLot: IParkingLot = {
     },
     {
       id: "8",
-      number: 8,
+      parkingSpotNumber: 8,
       status: "EMPTY",
-      type: "EV",
+      parkingSpotType: "EV",
       evCharger: {
         operator: "VOLT_UP",
         status: "AVAILABLE",
@@ -123,9 +123,9 @@ export const exampleParkingLot: IParkingLot = {
     },
     {
       id: "9",
-      number: 9,
+      parkingSpotNumber: 9,
       status: "RESERVED",
-      type: "EV",
+      parkingSpotType: "EV",
       evCharger: {
         operator: "VOLT_UP",
         status: "AVAILABLE",
@@ -138,69 +138,69 @@ export const exampleParkingLot: IParkingLot = {
     },
     {
       id: "10",
-      number: 10,
+      parkingSpotNumber: 10,
       status: "OCCUPIED",
-      type: "WOMEN",
+      parkingSpotType: "WOMEN",
     },
     {
       id: "11",
-      number: 11,
+      parkingSpotNumber: 11,
       status: "EMPTY",
-      type: "WOMEN",
+      parkingSpotType: "WOMEN",
     },
     {
       id: "12",
-      number: 12,
+      parkingSpotNumber: 12,
       status: "OCCUPIED",
-      type: "WOMEN",
+      parkingSpotType: "WOMEN",
     },
     {
       id: "13",
-      number: 13,
+      parkingSpotNumber: 13,
       status: "EMPTY",
-      type: "ELDERLY",
+      parkingSpotType: "ELDERLY",
     },
     {
       id: "14",
-      number: 14,
+      parkingSpotNumber: 14,
       status: "RESERVED",
-      type: "ELDERLY",
+      parkingSpotType: "ELDERLY",
     },
     {
       id: "15",
-      number: 15,
+      parkingSpotNumber: 15,
       status: "EMPTY",
-      type: "NORMAL",
+      parkingSpotType: "NORMAL",
     },
     {
       id: "16",
-      number: 16,
+      parkingSpotNumber: 16,
       status: "EMPTY",
-      type: "NORMAL",
+      parkingSpotType: "NORMAL",
     },
     {
       id: "17",
-      number: 17,
+      parkingSpotNumber: 17,
       status: "EMPTY",
-      type: "NORMAL",
+      parkingSpotType: "NORMAL",
     },
     {
       id: "18",
-      number: 18,
+      parkingSpotNumber: 18,
       status: "RESERVED",
-      type: "NORMAL",
+      parkingSpotType: "NORMAL",
     },
     {
       id: "19",
-      number: 19,
+      parkingSpotNumber: 19,
       status: "EMPTY",
-      type: "NORMAL",
+      parkingSpotType: "NORMAL",
     },
     {
       id: "20",
-      number: 20,
+      parkingSpotNumber: 20,
       status: "EMPTY",
-      type: "NORMAL",
+      parkingSpotType: "NORMAL",
     },
   ],
 };
@@ -208,6 +208,7 @@ export const exampleParkingLot: IParkingLot = {
 export const reservations: IReservation[] = [
   {
     id: "r1",
+    reservedBy: "kevin1",
     parkingSpotId: "5",
     parkingSpotNumber: 5,
     startTime: "2024-01-13T10:00:00+09:00",
@@ -216,6 +217,7 @@ export const reservations: IReservation[] = [
   },
   {
     id: "r2",
+    reservedBy: "someone",
     parkingSpotId: "3",
     parkingSpotNumber: 3,
     startTime: "2024-01-13T14:00:00+09:00",

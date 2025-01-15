@@ -26,9 +26,9 @@ export interface IEVCharger {
 
 export interface IParkingSpot {
   id: string;
-  number: number;
+  parkingSpotNumber: number;
   status: ParkingSpotStatus;
-  type: ParkingSpotType;
+  parkingSpotType: ParkingSpotType;
   evCharger?: IEVCharger;
 }
 
@@ -49,6 +49,7 @@ export interface IParkingLot {
 
 export interface IReservation {
   id: string;
+  reservedBy: string; // 예약자 ID
   parkingSpotId: string;
   parkingSpotNumber: number;
   startTime: string;
