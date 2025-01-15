@@ -9,7 +9,7 @@ export async function fetchParkingLot(id: string): Promise<IParkingLot> {
 }
 
 export async function reserveSpot(
-  parkingSpotNumber: string,
+  parkingSpotNumber: number,
   startTime: string,
   endTime: string
 ): Promise<void> {

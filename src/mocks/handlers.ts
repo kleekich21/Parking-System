@@ -82,17 +82,20 @@ export const handlers = [
   // 새로운 예약 생성 API
   http.post("/api/reserve", async ({ request }) => {
     await delay(ARTIFICIAL_DELAY_MS);
-    const { parkingSpotNumber } = (await request.json()) as {
-      parkingSpotNumber: number;
-    };
+    const { parkingSpotNumber, startTime, endTime } =
+      (await request.json()) as {
+        parkingSpotNumber: number;
+        startTime: string;
+        endTime: string;
+      };
 
     // 새로운 예약 생성
     const newReservation: IReservation = {
       id: `r${Date.now()}`,
       parkingSpotId: parkingSpotNumber.toString(),
       parkingSpotNumber,
-      startTime: new Date().toISOString(),
-      endTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), // 2시간 후
+      startTime,
+      endTime,
       status: "ACTIVE",
     };
 
