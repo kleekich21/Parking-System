@@ -19,14 +19,6 @@ function Sidebar({
 }: SidebarProps) {
   const content = (
     <>
-      {/* 어두운 배경 */}
-      <div
-        className={`fixed inset-0 bg-black/30 transition-opacity z-40
-          ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}
-        `}
-        onClick={onClose}
-      />
-
       {/* Sidebar */}
       <div
         className={`fixed top-0 bottom-0 bg-white shadow-xl z-50 transition-transform duration-300
