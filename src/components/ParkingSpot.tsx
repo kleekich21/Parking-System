@@ -1,0 +1,87 @@
+import { IParkingSpot, ParkingSpotStatus } from "../types/parking";
+import {
+  FaCar,
+  FaWheelchair,
+  FaChargingStation,
+  FaFemale,
+  FaUserAlt,
+} from "react-icons/fa";
+
+interface ParkingSpotProps {
+  spot: IParkingSpot;
+  onSelect?: (spot: IParkingSpot) => void;
+}
+
+const getStatusColor = (status: ParkingSpotStatus) => {
+  // TODO: 예약 상태에 따라 색상 변경
+  // return "bg-blue-100 border-blue-500";
+
+  switch (status) {
+    case "EMPTY":
+      return "bg-green-100 border-green-500";
+    case "OCCUPIED":
+    case "RESERVED":
+      return "bg-red-100 border-red-500";
+    default:
+      return "bg-gray-100 border-gray-500";
+  }
+};
+
+const getStatusText = (status: ParkingSpotStatus) => {
+  // TODO: 예약 상태에 따라 "예약 완료" 출력
+  // return "예약 완료";
+  switch (status) {
+    case "EMPTY":
+      return "예약 가능";
+    case "OCCUPIED":
+    case "RESERVED":
+      return "예약 불가";
+    default:
+      return "상태 없음";
+  }
+};
+
+const getTypeIcon = (type: IParkingSpot["type"]) => {
+  switch (type) {
+    case "DISABLED":
+      return <FaWheelchair className="text-blue-600" />;
+    case "EV":
+      return <FaChargingStation className="text-green-600" />;
+    case "WOMEN":
+      return <FaFemale className="text-pink-600" />;
+    case "ELDERLY":
+      return <FaUserAlt className="text-purple-600" />;
+    default:
+      return <FaCar className="text-gray-600" />;
+  }
+};
+
+export function ParkingSpot({ spot, onSelect }: ParkingSpotProps) {
+  return (
+    <div
+      className={`
+        relative p-4 border-2 rounded-lg
+        ${getStatusColor(spot.status)}
+        transition-all duration-200
+        hover:shadow-md
+        cursor-pointer
+      `}
+      onClick={() => onSelect?.(spot)}
+    >
+      <div className="absolute top-2 right-2">{getTypeIcon(spot.type)}</div>
+      <div className="text-2xl font-bold mb-2">#{spot.number}</div>
+      <div className="text-sm">{getStatusText(spot.status)}</div>
+      {spot.evCharger && (
+        <div className="mt-2 text-xs text-gray-600">
+          <div>충전 타입: {spot.evCharger.chargingType}</div>
+          <div>
+            충전 속도:{" "}
+            {spot.evCharger.chargingSpeed === "FAST" ? "급속" : "완속"}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default ParkingSpot;
