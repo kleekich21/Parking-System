@@ -1,5 +1,7 @@
 import { http, HttpResponse, delay } from "msw";
-import { ParkingLot, EVChargingSpot } from "../types/parking";
+import { ParkingLot, Reservation } from "../types/parking";
+
+const ARTIFICIAL_DELAY_MS = 1000;
 
 const exampleParkingLot: ParkingLot = {
   name: "서울시청 주차장",
@@ -43,54 +45,55 @@ const exampleParkingLot: ParkingLot = {
       id: "5",
       number: 5,
       status: "OCCUPIED",
+      evCharger: {
+        operator: "VOLT_UP",
+        status: "CHARGING",
+        chargingSpeed: "SLOW",
+        chargingType: "AC",
+        chargingPower: 20,
+        pricePerKWh: 150,
+        lastUpdated: "2025-01-13T14:30:00+09:00",
+      },
     },
     {
       id: "6",
       number: 6,
       status: "EMPTY",
+      evCharger: {
+        operator: "VOLT_UP",
+        status: "AVAILABLE",
+        chargingSpeed: "FAST",
+        chargingType: "DC_COMBO",
+        chargingPower: 100,
+        pricePerKWh: 450,
+        lastUpdated: "2025-01-13T14:30:00+09:00",
+      },
     },
   ],
 };
 
-const EVchargingSpots: EVChargingSpot[] = [
+const reservations: Reservation[] = [
   {
+    id: "r1",
+    parkingSpotId: "5",
     parkingSpotNumber: 5,
-    operator: "VOLT_UP",
-    status: "AVAILABLE",
-    chargingSpeed: "SLOW",
-    chargingType: "AC",
-    chargingPower: 20,
-    pricePerKWh: 150,
-    lastUpdated: "2025-01-13T14:30:00+09:00",
+    startTime: "2024-01-13T10:00:00+09:00",
+    endTime: "2024-01-13T12:00:00+09:00",
+    status: "COMPLETED",
   },
   {
-    parkingSpotNumber: 6,
-    operator: "VOLT_UP",
-    status: "UNAVAILABLE",
-    chargingSpeed: "FAST",
-    chargingType: "DC_COMBO",
-    chargingPower: 100,
-    pricePerKWh: 450,
-    lastUpdated: "2025-01-13T14:30:00+09:00",
+    id: "r2",
+    parkingSpotId: "3",
+    parkingSpotNumber: 3,
+    startTime: "2024-01-13T14:00:00+09:00",
+    endTime: "2024-01-13T16:00:00+09:00",
+    status: "ACTIVE",
   },
 ];
 
-// 지연 시간을 설정할 수 있는 상수
-const ARTIFICIAL_DELAY_MS = 1000; // 1초
-
 export const handlers = [
-  /** 주차면 현황 조회 */
   http.get("/api/parking-lot/:id", async ({ params }) => {
-    // 네트워크 상태에 따른 지연 시뮬레이션
-    const networkCondition = Math.random();
-    if (networkCondition < 0.1) {
-      // 10% 확률로 3초 지연
-      await delay(3000);
-    } else {
-      // 90% 확률로 1초 지연
-      await delay(ARTIFICIAL_DELAY_MS);
-    }
-
+    await delay(ARTIFICIAL_DELAY_MS);
     const { id } = params;
     if (id === exampleParkingLot.id) {
       return HttpResponse.json(exampleParkingLot);
@@ -101,29 +104,72 @@ export const handlers = [
     );
   }),
 
-  /** 주차면 예약 */
+  // 예약 내역 조회 API
+  http.get("/api/reservations", async () => {
+    await delay(ARTIFICIAL_DELAY_MS);
+    return HttpResponse.json(reservations);
+  }),
+
+  // 특정 예약 조회 API
+  http.get("/api/reservations/:id", async ({ params }) => {
+    await delay(ARTIFICIAL_DELAY_MS);
+    const { id } = params;
+    const reservation = reservations.find((r) => r.id === id);
+
+    if (reservation) {
+      return HttpResponse.json(reservation);
+    }
+
+    return HttpResponse.json(
+      { error: "Reservation not found" },
+      { status: 404 }
+    );
+  }),
+
+  // 예약 취소 API
+  http.patch("/api/reservations/:id/cancel", async ({ params }) => {
+    await delay(ARTIFICIAL_DELAY_MS);
+    const { id } = params;
+    const reservation = reservations.find((r) => r.id === id);
+
+    if (reservation && reservation.status === "ACTIVE") {
+      reservation.status = "CANCELLED";
+      return HttpResponse.json({ success: true, reservation });
+    }
+
+    return HttpResponse.json(
+      {
+        error: "Cannot cancel reservation",
+        reason: reservation
+          ? "Reservation is not active"
+          : "Reservation not found",
+      },
+      { status: 400 }
+    );
+  }),
+
+  // 새로운 예약 생성 API
   http.post("/api/reserve", async ({ request }) => {
-    // 랜덤 지연 (0.5초 ~ 2초)
-    await delay(Math.random() * 1500 + 500);
+    await delay(ARTIFICIAL_DELAY_MS);
     const { parkingSpotNumber } = (await request.json()) as {
       parkingSpotNumber: number;
     };
-    return HttpResponse.json({ success: true, parkingSpotNumber });
-  }),
 
-  /** 주차면 충전기 현황 조회 */
-  http.get("/api/ev-charging/:id", async ({ params }) => {
-    // 조건부 지연
-    const { id } = params;
-    if (id === exampleParkingLot.id) {
-      await delay(ARTIFICIAL_DELAY_MS);
-      return HttpResponse.json(EVchargingSpots);
-    }
-    // 에러 응답은 더 짧은 지연
-    await delay(500);
-    return HttpResponse.json(
-      { error: "Charging spots not found" },
-      { status: 404 }
-    );
+    // 새로운 예약 생성
+    const newReservation: Reservation = {
+      id: `r${Date.now()}`,
+      parkingSpotId: parkingSpotNumber.toString(),
+      parkingSpotNumber,
+      startTime: new Date().toISOString(),
+      endTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), // 2시간 후
+      status: "ACTIVE",
+    };
+
+    reservations.push(newReservation);
+
+    return HttpResponse.json({
+      success: true,
+      reservation: newReservation,
+    });
   }),
 ];
