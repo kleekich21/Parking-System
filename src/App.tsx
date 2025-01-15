@@ -2,6 +2,9 @@ import ParkingLot from "./components/ParkingLot";
 import ParkingLotInfo from "./components/ParkingLotInfo";
 import { useParkingLot } from "./hooks/useParking";
 import { PARKING_LOT_ID } from "./mocks/data";
+import { useState } from "react";
+import { IParkingSpot } from "./types/parking";
+import ParkingSpotSidebar from "./components/ParkingSpotSidebar";
 
 function App() {
   const {
@@ -9,6 +12,8 @@ function App() {
     isLoading: isLoadingParkingLot,
     error: parkingLotError,
   } = useParkingLot(PARKING_LOT_ID);
+
+  const [selectedSpot, setSelectedSpot] = useState<IParkingSpot | null>(null);
 
   if (isLoadingParkingLot) {
     return <div className="p-4">로딩 중...</div>;
@@ -29,8 +34,18 @@ function App() {
       <div className="space-y-6">
         <ParkingLotInfo parkingLot={parkingLot} />
 
-        <ParkingLot spots={parkingLot?.parkingSpots} />
+        <ParkingLot
+          spots={parkingLot?.parkingSpots}
+          onSpotSelect={setSelectedSpot}
+        />
       </div>
+      {selectedSpot && (
+        <ParkingSpotSidebar
+          spot={selectedSpot}
+          isOpen={!!selectedSpot}
+          onClose={() => setSelectedSpot(null)}
+        />
+      )}
     </div>
   );
 }
