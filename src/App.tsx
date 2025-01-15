@@ -1,7 +1,7 @@
 import ParkingLot from "./components/ParkingLot";
 import ParkingLotInfo from "./components/ParkingLotInfo";
 import { useParkingLot } from "./hooks/useParking";
-import { PARKING_LOT_ID } from "./constants/dummy";
+import { PARKING_LOT_ID } from "./mocks/data";
 
 function App() {
   const {
