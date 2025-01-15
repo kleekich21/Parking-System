@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
+import { QueryProvider } from "./providers/QueryProvider";
 
 async function enableMocking() {
   if (process.env.NODE_ENV !== "development") {
@@ -19,7 +20,9 @@ async function enableMocking() {
 enableMocking().then(() => {
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
-      <App />
+      <QueryProvider>
+        <App />
+      </QueryProvider>
     </StrictMode>
   );
 });
