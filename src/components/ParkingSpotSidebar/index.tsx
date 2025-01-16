@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { IParkingSpot } from "../../types/parking";
 import Sidebar from "../common/Sidebar";
 import { useReservationDetail } from "../../hooks/useReservation";
 import ReservationForm from "./ReservationForm";
 import ReservationInfo from "./ReservationInfo";
 import EVChargerInfo from "./EVChargerInfo";
-import CancelReservationModal from "./CancelReservationModal";
 
 import { currentUser } from "../../mocks/data";
 
@@ -20,16 +18,19 @@ export function ParkingSpotSidebar({
   isOpen,
   onClose,
 }: ParkingSpotSidebarProps) {
-  const [showCancelModal, setShowCancelModal] = useState(false);
   const { parkingSpotNumber, status, evCharger } = spot;
   const { data: reservation } = useReservationDetail({
     parkingSpotNumber,
   });
   const isReservedByCurrentUser = currentUser.id === reservation?.reservedBy;
 
-  const renderContent = () => {
-    return (
-      <>
+  return (
+    <Sidebar
+      isOpen={isOpen}
+      onClose={onClose}
+      title={`주차면 #${parkingSpotNumber}`}
+    >
+      <div className="space-y-6">
         {status !== "EMPTY" && !isReservedByCurrentUser && (
           <div className="bg-red-50 border border-red-200 rounded-md p-4">
             <p className="text-red-700">현재 예약이 불가능한 주차면입니다.</p>
@@ -39,39 +40,14 @@ export function ParkingSpotSidebar({
           </div>
         )}
         {reservation && (
-          <ReservationInfo
-            reservation={reservation}
-            onCancelClick={() => setShowCancelModal(true)}
-          />
+          <ReservationInfo reservation={reservation} onCancel={onClose} />
         )}
         {evCharger && <EVChargerInfo evCharger={evCharger} />}
         {status === "EMPTY" && (
           <ReservationForm spot={spot} onSuccess={onClose} />
         )}
-      </>
-    );
-  };
-
-  return (
-    <>
-      <Sidebar
-        isOpen={isOpen}
-        onClose={onClose}
-        title={`주차면 #${parkingSpotNumber}`}
-      >
-        <div className="space-y-6">{renderContent()}</div>
-      </Sidebar>
-
-      <CancelReservationModal
-        isOpen={showCancelModal}
-        onClose={() => setShowCancelModal(false)}
-        onConfirm={() => {
-          // TODO: 예약 취소 로직 구현
-          setShowCancelModal(false);
-          onClose();
-        }}
-      />
-    </>
+      </div>
+    </Sidebar>
   );
 }
 

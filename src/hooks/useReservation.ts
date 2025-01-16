@@ -3,6 +3,7 @@ import {
   reserveSpot,
   fetchReservation,
   fetchReservations,
+  cancelReservation,
 } from "../api/reservation";
 import { QUERY_KEYS } from "../constants/queryKeys";
 
@@ -31,5 +32,12 @@ export function useReservations() {
   return useSuspenseQuery({
     queryKey: QUERY_KEYS.RESERVATION.LIST,
     queryFn: () => fetchReservations(),
+  });
+}
+
+export function useCancelReservation() {
+  return useMutation({
+    mutationFn: (parkingSpotNumber: number) =>
+      cancelReservation(parkingSpotNumber),
   });
 }

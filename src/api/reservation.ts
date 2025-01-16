@@ -39,3 +39,18 @@ export async function fetchReservation(
   }
   return response.json();
 }
+
+export async function cancelReservation(
+  parkingSpotNumber: number
+): Promise<void> {
+  const response = await fetch(
+    `/api/reservations/${parkingSpotNumber}/cancel`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("예약 취소에 실패했습니다.");
+  }
+}
