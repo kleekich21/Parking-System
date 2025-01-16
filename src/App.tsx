@@ -7,7 +7,9 @@ import { PARKING_LOT_ID } from "./mocks/data";
 import { IParkingSpot } from "./types/parking";
 import ParkingSpotSidebar from "./components/ParkingSpotSidebar";
 import ErrorFallback from "./components/ErrorFallback";
-import LoadingFallback from "./components/LoadingFallback";
+import ParkingLotInfoSkeleton from "./components/Skeletons/ParkingLotInfoSkeleton";
+import ParkingSpotsSkeleton from "./components/Skeletons/ParkingSpotsSkeleton";
+import SidebarSkeleton from "./components/Skeletons/SidebarSkeleton";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "./constants/queryKeys";
 import { Toaster } from "react-hot-toast";
@@ -46,19 +48,24 @@ function App() {
       <h1 className="text-2xl font-bold mb-6">주차장 현황</h1>
 
       <div className="space-y-6">
-        <ParkingLotInfo parkingLot={parkingLot} />
-
-        <ParkingLot
-          spots={parkingLot?.parkingSpots}
-          onSpotSelect={handleSelectSpot}
-        />
+        <Suspense fallback={<ParkingLotInfoSkeleton />}>
+          <ParkingLotInfo parkingLot={parkingLot} />
+        </Suspense>
+        <Suspense fallback={<ParkingSpotsSkeleton />}>
+          <ParkingLot
+            spots={parkingLot?.parkingSpots}
+            onSpotSelect={handleSelectSpot}
+          />
+        </Suspense>
       </div>
       {selectedSpot && (
-        <ParkingSpotSidebar
-          spot={selectedSpot}
-          isOpen={!!selectedSpot}
-          onClose={() => setSelectedSpot(null)}
-        />
+        <Suspense fallback={<SidebarSkeleton />}>
+          <ParkingSpotSidebar
+            spot={selectedSpot}
+            isOpen={!!selectedSpot}
+            onClose={() => setSelectedSpot(null)}
+          />
+        </Suspense>
       )}
     </div>
   );
@@ -66,7 +73,7 @@ function App() {
   return (
     <>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <Suspense fallback={<LoadingFallback />}>{renderContent()}</Suspense>
+        {renderContent()}
       </ErrorBoundary>
       <Toaster
         position="top-center"

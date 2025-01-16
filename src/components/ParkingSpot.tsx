@@ -67,9 +67,8 @@ export function ParkingSpot({
         ${getStatusColor(status, isReservedByCurrentUser)}
         transition-all duration-200
         hover:shadow-md
-        disabled:cursor-not-allowed
-        disabled:opacity-75
         min-h-[150px]
+        min-w-[100px]
       `}
       aria-label={`주차면 ${parkingSpotNumber}번, ${statusText}`}
     >
