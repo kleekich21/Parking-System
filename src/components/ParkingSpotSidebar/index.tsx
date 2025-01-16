@@ -6,6 +6,7 @@ import ReservationForm from "./ReservationForm";
 import ReservationInfo from "./ReservationInfo";
 import EVChargerInfo from "./EVChargerInfo";
 import CancelReservationModal from "./CancelReservationModal";
+import { currentUser } from "../../mocks/data";
 
 interface ParkingSpotSidebarProps {
   spot: IParkingSpot;
@@ -23,11 +24,12 @@ export function ParkingSpotSidebar({
   const { data: reservation } = useReservationDetail({
     parkingSpotNumber,
   });
+  const isReservedByCurrentUser = currentUser.id === reservation?.reservedBy;
 
   const renderContent = () => {
     return (
       <>
-        {status !== "EMPTY" && (
+        {status !== "EMPTY" && !isReservedByCurrentUser && (
           <div className="bg-red-50 border border-red-200 rounded-md p-4">
             <p className="text-red-700">현재 예약이 불가능한 주차면입니다.</p>
             <p className="text-sm text-red-600 mt-1">
@@ -35,16 +37,22 @@ export function ParkingSpotSidebar({
             </p>
           </div>
         )}
-        {evCharger && <EVChargerInfo evCharger={evCharger} />}
-        {status === "EMPTY" && (
-          <ReservationForm spot={spot} onSuccess={onClose} />
-        )}
         {reservation && (
           <ReservationInfo
             reservation={reservation}
             onCancelClick={() => setShowCancelModal(true)}
           />
         )}
+        {evCharger && <EVChargerInfo evCharger={evCharger} />}
+        {status === "EMPTY" && (
+          <ReservationForm spot={spot} onSuccess={onClose} />
+        )}
+        {/* {reservation && (
+          <ReservationInfo
+            reservation={reservation}
+            // onCancelClick={() => setShowCancelModal(true)}
+          />
+        )} */}
       </>
     );
   };

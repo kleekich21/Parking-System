@@ -22,10 +22,10 @@ function CancelReservationModal({
       footer={
         <>
           <Button type="secondary" onClick={onClose}>
-            취소
+            닫기
           </Button>
           <Button type="danger" onClick={onConfirm} isLoading={isLoading}>
-            예약 취소하기
+            예약취소
           </Button>
         </>
       }

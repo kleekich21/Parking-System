@@ -105,10 +105,27 @@ export const handlers = [
     // 예약 내역 업데이트
     reservations.push(newReservation);
 
-    // 주차면 상태 업데이트
-    exampleParkingLot.parkingSpots.find(
+    const selectedSpot = exampleParkingLot.parkingSpots.find(
       (spot) => spot.parkingSpotNumber === parkingSpotNumber
-    )!.status = "RESERVED";
+    );
+
+    // 주차면 상태 업데이트
+    selectedSpot!.status = "RESERVED";
+
+    // 주차장 현황 업데이트
+    exampleParkingLot.availableParkingSpots -= 1;
+
+    if (selectedSpot!.parkingSpotType === "EV") {
+      exampleParkingLot.evCharging.available -= 1;
+    }
+
+    if (selectedSpot?.evCharger?.chargingSpeed === "SLOW") {
+      exampleParkingLot.evCharging.slowCharging.available -= 1;
+    }
+
+    if (selectedSpot?.evCharger?.chargingSpeed === "FAST") {
+      exampleParkingLot.evCharging.fastCharging.available -= 1;
+    }
 
     return HttpResponse.json({
       success: true,

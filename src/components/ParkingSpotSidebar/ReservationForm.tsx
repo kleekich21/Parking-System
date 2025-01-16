@@ -36,6 +36,9 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.PARKING.PARKING_LOT(PARKING_LOT_ID),
       });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.RESERVATION.DETAIL(parkingSpotNumber),
+      });
     } catch (error) {
       console.error("예약 실패:", error);
     }

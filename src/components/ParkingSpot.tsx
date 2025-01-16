@@ -6,15 +6,21 @@ import {
   FaFemale,
   FaUserAlt,
 } from "react-icons/fa";
+import { useReservationDetail } from "../hooks/useReservation";
+import { currentUser } from "../mocks/data";
 
 interface ParkingSpotProps {
   spot: IParkingSpot;
   onSelect?: (spot: IParkingSpot) => void;
 }
 
-const getStatusColor = (status: ParkingSpotStatus) => {
-  // TODO: 예약 상태에 따라 색상 변경
-  // return "bg-blue-100 border-blue-500";
+const getStatusColor = (
+  status: ParkingSpotStatus,
+  isReservedByCurrentUser: boolean
+) => {
+  if (isReservedByCurrentUser) {
+    return "bg-blue-100 border-blue-500";
+  }
 
   switch (status) {
     case "EMPTY":
@@ -27,9 +33,14 @@ const getStatusColor = (status: ParkingSpotStatus) => {
   }
 };
 
-const getStatusText = (status: ParkingSpotStatus) => {
-  // TODO: 예약 상태에 따라 "예약 완료" 출력
-  // return "예약 완료";
+const getStatusText = (
+  status: ParkingSpotStatus,
+  isReservedByCurrentUser: boolean
+) => {
+  if (isReservedByCurrentUser) {
+    return "예약 완료";
+  }
+
   switch (status) {
     case "EMPTY":
       return "예약 가능";
@@ -57,11 +68,14 @@ const getTypeIcon = (type: IParkingSpot["parkingSpotType"]) => {
 };
 
 export function ParkingSpot({ spot, onSelect }: ParkingSpotProps) {
+  const { parkingSpotNumber, status, parkingSpotType, evCharger } = spot;
+  const { data: reservation } = useReservationDetail({ parkingSpotNumber });
+  const isReservedByCurrentUser = currentUser.id === reservation?.reservedBy;
   return (
     <div
       className={`
         relative p-4 border-2 rounded-lg
-        ${getStatusColor(spot.status)}
+        ${getStatusColor(status, isReservedByCurrentUser)}
         transition-all duration-200
         hover:shadow-md
         cursor-pointer
@@ -69,16 +83,17 @@ export function ParkingSpot({ spot, onSelect }: ParkingSpotProps) {
       onClick={() => onSelect?.(spot)}
     >
       <div className="absolute top-2 right-2">
-        {getTypeIcon(spot.parkingSpotType)}
+        {getTypeIcon(parkingSpotType)}
       </div>
-      <div className="text-2xl font-bold mb-2">#{spot.parkingSpotNumber}</div>
-      <div className="text-sm">{getStatusText(spot.status)}</div>
-      {spot.evCharger && (
+      <div className="text-2xl font-bold mb-2">#{parkingSpotNumber}</div>
+      <div className="text-sm">
+        {getStatusText(status, isReservedByCurrentUser)}
+      </div>
+      {evCharger && (
         <div className="mt-2 text-xs text-gray-600">
-          <div>충전 타입: {spot.evCharger.chargingType}</div>
+          <div>충전 타입: {evCharger.chargingType}</div>
           <div>
-            충전 속도:{" "}
-            {spot.evCharger.chargingSpeed === "FAST" ? "급속" : "완속"}
+            충전 속도: {evCharger.chargingSpeed === "FAST" ? "급속" : "완속"}
           </div>
         </div>
       )}

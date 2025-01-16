@@ -14,7 +14,7 @@ export const exampleParkingLot: IParkingLot = {
   id: "1",
   address: "서울특별시 중구 세종대로 110",
   totalParkingSpots: 20,
-  availableParkingSpots: 10,
+  availableParkingSpots: 13,
   evCharging: {
     total: 6,
     available: 4,
@@ -208,7 +208,7 @@ export const exampleParkingLot: IParkingLot = {
 export const reservations: IReservation[] = [
   {
     id: "r1736958540821",
-    reservedBy: "kevin1",
+    reservedBy: "someone",
     parkingSpotId: "3",
     parkingSpotNumber: 3,
     startTime: "2024-01-13T10:00:00+09:00",
@@ -220,6 +220,15 @@ export const reservations: IReservation[] = [
     reservedBy: "someone",
     parkingSpotId: "9",
     parkingSpotNumber: 9,
+    startTime: "2024-01-13T14:00:00+09:00",
+    endTime: "2024-01-13T16:00:00+09:00",
+    status: "ACTIVE",
+  },
+  {
+    id: "r1736958623524",
+    reservedBy: "someone",
+    parkingSpotId: "14",
+    parkingSpotNumber: 14,
     startTime: "2024-01-13T14:00:00+09:00",
     endTime: "2024-01-13T16:00:00+09:00",
     status: "ACTIVE",
