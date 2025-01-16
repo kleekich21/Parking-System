@@ -51,25 +51,33 @@ export function ParkingSpot({
   isReservedByCurrentUser,
 }: ParkingSpotProps) {
   const { parkingSpotNumber, status, parkingSpotType, evCharger } = spot;
+
+  const handleClick = () => {
+    onSelect?.(spot);
+  };
+
+  const statusText = getStatusText(status, isReservedByCurrentUser);
+
   return (
-    <div
+    <button
+      type="button"
+      onClick={handleClick}
       className={`
-        relative p-4 border-2 rounded-lg
+        relative p-4 border-2 rounded-lg w-full text-left
         ${getStatusColor(status, isReservedByCurrentUser)}
         transition-all duration-200
         hover:shadow-md
-        cursor-pointer
+        disabled:cursor-not-allowed
+        disabled:opacity-75
         min-h-[150px]
       `}
-      onClick={() => onSelect?.(spot)}
+      aria-label={`주차면 ${parkingSpotNumber}번, ${statusText}`}
     >
       <div className="absolute top-2 right-2">
         {getTypeIcon(parkingSpotType)}
       </div>
       <div className="text-2xl font-bold mb-2">#{parkingSpotNumber}</div>
-      <div className="text-sm">
-        {getStatusText(status, isReservedByCurrentUser)}
-      </div>
+      <div className="text-sm">{statusText}</div>
       {evCharger && (
         <div className="mt-2 text-xs text-gray-600">
           <div>충전 타입: {evCharger.chargingType}</div>
@@ -78,7 +86,7 @@ export function ParkingSpot({
           </div>
         </div>
       )}
-    </div>
+    </button>
   );
 }
 
