@@ -26,3 +26,10 @@ export function useReservationDetail({
     queryFn: () => fetchReservation(parkingSpotNumber),
   });
 }
+
+export function useReservations() {
+  return useSuspenseQuery({
+    queryKey: QUERY_KEYS.RESERVATION.LIST,
+    queryFn: () => fetchReservations(),
+  });
+}

@@ -6,12 +6,11 @@ import {
   FaFemale,
   FaUserAlt,
 } from "react-icons/fa";
-import { useReservationDetail } from "../hooks/useReservation";
-import { currentUser } from "../mocks/data";
 
 interface ParkingSpotProps {
   spot: IParkingSpot;
   onSelect?: (spot: IParkingSpot) => void;
+  isReservedByCurrentUser: boolean;
 }
 
 const getStatusColor = (
@@ -67,10 +66,12 @@ const getTypeIcon = (type: IParkingSpot["parkingSpotType"]) => {
   }
 };
 
-export function ParkingSpot({ spot, onSelect }: ParkingSpotProps) {
+export function ParkingSpot({
+  spot,
+  onSelect,
+  isReservedByCurrentUser,
+}: ParkingSpotProps) {
   const { parkingSpotNumber, status, parkingSpotType, evCharger } = spot;
-  const { data: reservation } = useReservationDetail({ parkingSpotNumber });
-  const isReservedByCurrentUser = currentUser.id === reservation?.reservedBy;
   return (
     <div
       className={`

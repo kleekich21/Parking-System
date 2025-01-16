@@ -7,5 +7,6 @@ export const QUERY_KEYS = {
     ALL: ["reservations"] as const,
     DETAIL: (parkingSpotNumber: number) =>
       ["reservations", parkingSpotNumber] as const,
+    LIST: ["reservations"] as const,
   },
 } as const;
