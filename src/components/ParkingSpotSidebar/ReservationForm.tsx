@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
+import toast from "react-hot-toast";
 import { useReserveSpot } from "../../hooks/useReservation";
 import { IParkingSpot } from "../../types/parking";
 import { calculateTotalTime, calculatePrice } from "../../utils";
@@ -66,12 +67,15 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
   const handleConfirm = async () => {
     if (!formData) return;
 
+    const toastId = toast.loading("예약 처리 중...");
+
     try {
       await reserveMutation.mutateAsync({
         parkingSpotNumber,
         startTime: formData.startTime,
         endTime: formData.endTime,
       });
+      toast.success("예약이 완료되었습니다.", { id: toastId });
       setShowConfirmModal(false);
       onSuccess();
       // 예약 내역 업데이트 후 주차장 현황 리페치
@@ -82,7 +86,12 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
         queryKey: QUERY_KEYS.RESERVATION.ALL,
       });
     } catch (error) {
-      console.error("예약 실패:", error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "예약 처리 중 오류가 발생했습니다.",
+        { id: toastId }
+      );
     }
   };
 
