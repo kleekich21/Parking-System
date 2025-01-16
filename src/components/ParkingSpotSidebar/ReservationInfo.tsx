@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { IReservation } from "../../types/parking";
 import Button from "../common/Button";
-import { currentUser } from "../../mocks/data";
 import toast from "react-hot-toast";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
 import { PARKING_LOT_ID } from "../../mocks/data";
 import { useCancelReservation } from "../../hooks/useReservation";
 import CancelReservationModal from "./CancelReservationModal";
-
+import { useCurrentUserReservations } from "../../hooks/useReservation";
 interface ReservationInfoProps {
   reservation: IReservation;
   onCancel?: () => void;
@@ -18,8 +17,8 @@ function ReservationInfo({ reservation, onCancel }: ReservationInfoProps) {
   const queryClient = useQueryClient();
   const [showCancelModal, setShowCancelModal] = useState(false);
   const cancelReservationMutation = useCancelReservation();
-  const { id, startTime, endTime, reservedBy, parkingSpotNumber } = reservation;
-  const isReservedByCurrentUser = currentUser.id === reservedBy;
+  const { id, startTime, endTime, parkingSpotNumber } = reservation;
+  const { isReservedByCurrentUser } = useCurrentUserReservations();
 
   const handleCancelClick = async () => {
     const toastId = toast.loading("예약 처리 중...");
@@ -48,7 +47,7 @@ function ReservationInfo({ reservation, onCancel }: ReservationInfoProps) {
   return (
     <>
       <div className="space-y-6 border-t bg-gray-50 p-4">
-        {isReservedByCurrentUser ? (
+        {isReservedByCurrentUser(parkingSpotNumber) ? (
           <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
             <p className="text-blue-700 text-center text-lg font-semibold">
               예약완료

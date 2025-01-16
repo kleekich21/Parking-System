@@ -1,24 +1,18 @@
 import { IParkingSpot } from "../types/parking";
 import { ParkingSpot } from "./ParkingSpot";
-import { useReservations } from "../hooks/useReservation";
-import { currentUser } from "../mocks/data";
+import { useCurrentUserReservations } from "../hooks/useReservation";
+
 interface ParkingLotProps {
   spots?: IParkingSpot[];
   onSpotSelect?: (spot: IParkingSpot) => void;
 }
 
 export function ParkingLot({ spots, onSpotSelect }: ParkingLotProps) {
-  const { data: reservations } = useReservations();
-  if (!spots) return null;
-  const currentUserReservations = reservations?.filter(
-    (reservation) => reservation.reservedBy === currentUser.id
-  );
-  const parkingSpotNumbers = currentUserReservations?.map(
-    (reservation) => reservation.parkingSpotNumber
-  );
-  const isReservedByCurrentUser = (parkingSpotNumber: number) => {
-    return parkingSpotNumbers?.includes(parkingSpotNumber);
-  };
+  const { isReservedByCurrentUser } = useCurrentUserReservations();
+
+  if (!spots) {
+    return null;
+  }
 
   return (
     <div className="relative">

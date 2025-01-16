@@ -6,6 +6,8 @@ import {
   cancelReservation,
 } from "../api/reservation";
 import { QUERY_KEYS } from "../constants/queryKeys";
+import { currentUser } from "../mocks/data";
+import { useMemo } from "react";
 
 export function useReserveSpot() {
   return useMutation({
@@ -40,4 +42,27 @@ export function useCancelReservation() {
     mutationFn: (parkingSpotNumber: number) =>
       cancelReservation(parkingSpotNumber),
   });
+}
+
+export function useCurrentUserReservations() {
+  const { data: reservations } = useSuspenseQuery({
+    queryKey: QUERY_KEYS.RESERVATION.LIST,
+    queryFn: fetchReservations,
+  });
+
+  const reservationMap = useMemo(() => {
+    const map = new Map();
+    reservations?.forEach((reservation) => {
+      if (reservation.reservedBy === currentUser.id) {
+        map.set(reservation.parkingSpotNumber, reservation);
+      }
+    });
+    return map;
+  }, [reservations]);
+
+  return {
+    isReservedByCurrentUser: (spotNumber: number) =>
+      reservationMap.has(spotNumber),
+    getReservation: (spotNumber: number) => reservationMap.get(spotNumber),
+  };
 }

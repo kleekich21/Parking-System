@@ -4,8 +4,9 @@ import { useReservationDetail } from "../../hooks/useReservation";
 import ReservationForm from "./ReservationForm";
 import ReservationInfo from "./ReservationInfo";
 import EVChargerInfo from "./EVChargerInfo";
-import { currentUser } from "../../mocks/data";
 import { getTypeIcon } from "../../components/common/ParkingIcons";
+import { useCurrentUserReservations } from "../../hooks/useReservation";
+
 interface ParkingSpotSidebarProps {
   spot: IParkingSpot;
   isOpen: boolean;
@@ -18,10 +19,10 @@ export function ParkingSpotSidebar({
   onClose,
 }: ParkingSpotSidebarProps) {
   const { parkingSpotNumber, status, evCharger } = spot;
+  const { isReservedByCurrentUser } = useCurrentUserReservations();
   const { data: reservation } = useReservationDetail({
     parkingSpotNumber,
   });
-  const isReservedByCurrentUser = currentUser.id === reservation?.reservedBy;
 
   return (
     <Sidebar
@@ -32,7 +33,7 @@ export function ParkingSpotSidebar({
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-6xl font-bold">#{parkingSpotNumber}</h2>
-          {status !== "EMPTY" && !isReservedByCurrentUser ? (
+          {status !== "EMPTY" && !isReservedByCurrentUser(parkingSpotNumber) ? (
             <div className="p-4">
               <p className="text-red-700">예약 불가능</p>
               <p className="text-sm text-red-600 mt-1">
