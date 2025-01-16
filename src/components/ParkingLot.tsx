@@ -10,9 +10,15 @@ interface ParkingLotProps {
 export function ParkingLot({ spots, onSpotSelect }: ParkingLotProps) {
   const { data: reservations } = useReservations();
   if (!spots) return null;
-  const isReservedByCurrentUser = reservations?.some(
+  const currentUserReservations = reservations?.filter(
     (reservation) => reservation.reservedBy === currentUser.id
   );
+  const parkingSpotNumbers = currentUserReservations?.map(
+    (reservation) => reservation.parkingSpotNumber
+  );
+  const isReservedByCurrentUser = (parkingSpotNumber: number) => {
+    return parkingSpotNumbers?.includes(parkingSpotNumber);
+  };
 
   return (
     <div className="relative">
@@ -22,7 +28,9 @@ export function ParkingLot({ spots, onSpotSelect }: ParkingLotProps) {
             key={spot.id}
             spot={spot}
             onSelect={onSpotSelect}
-            isReservedByCurrentUser={isReservedByCurrentUser}
+            isReservedByCurrentUser={isReservedByCurrentUser(
+              spot.parkingSpotNumber
+            )}
           />
         ))}
       </div>

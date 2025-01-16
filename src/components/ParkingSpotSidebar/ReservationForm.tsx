@@ -37,6 +37,9 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
         queryKey: QUERY_KEYS.PARKING.PARKING_LOT(PARKING_LOT_ID),
       });
       queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.RESERVATION.LIST,
+      });
+      queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.RESERVATION.DETAIL(parkingSpotNumber),
       });
     } catch (error) {
