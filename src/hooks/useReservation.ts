@@ -1,5 +1,9 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { reserveSpot, fetchReservation } from "../api/reservation";
+import { useSuspenseQuery, useMutation } from "@tanstack/react-query";
+import {
+  reserveSpot,
+  fetchReservation,
+  fetchReservations,
+} from "../api/reservation";
 import { QUERY_KEYS } from "../constants/queryKeys";
 
 export function useReserveSpot() {
@@ -17,7 +21,7 @@ export function useReservationDetail({
 }: {
   parkingSpotNumber: number;
 }) {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: QUERY_KEYS.RESERVATION.DETAIL(parkingSpotNumber),
     queryFn: () => fetchReservation(parkingSpotNumber),
   });

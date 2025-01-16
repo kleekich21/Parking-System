@@ -1,6 +1,5 @@
 import { IParkingSpot } from "../types/parking";
 import { ParkingSpot } from "./ParkingSpot";
-
 interface ParkingLotProps {
   spots?: IParkingSpot[];
   onSpotSelect?: (spot: IParkingSpot) => void;

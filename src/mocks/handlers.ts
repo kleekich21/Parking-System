@@ -53,10 +53,7 @@ export const handlers = [
       return HttpResponse.json(activeReservation);
     }
 
-    return HttpResponse.json(
-      { error: "No active reservation found for this parking spot" },
-      { status: 404 }
-    );
+    return HttpResponse.json();
   }),
 
   // 예약 취소 API

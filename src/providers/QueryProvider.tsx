@@ -1,5 +1,6 @@
+import { Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
+import LoadingFallback from "../components/LoadingFallback";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -13,8 +14,16 @@ const queryClient = new QueryClient({
   },
 });
 
-export function QueryProvider({ children }: { children: React.ReactNode }) {
+export function QueryProvider({
+  children,
+  fallback,
+}: {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}) {
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <Suspense fallback={fallback || <LoadingFallback />}>{children}</Suspense>
+    </QueryClientProvider>
   );
 }
