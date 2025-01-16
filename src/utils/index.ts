@@ -1,8 +1,9 @@
+import { differenceInMinutes } from "date-fns";
+
 export const calculateTotalMinutes = (startTime: string, endTime: string) => {
-  if (!startTime || !endTime) return 0;
-  const start = new Date(startTime).getTime();
-  const end = new Date(endTime).getTime();
-  return Math.ceil((end - start) / (1000 * 60)); // 분 단위
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  return Math.ceil(differenceInMinutes(end, start));
 };
 
 export const calculateTotalTime = (startTime: string, endTime: string) => {

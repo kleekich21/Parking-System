@@ -11,6 +11,7 @@ import { calculateTotalTime, calculatePrice } from "../../utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { PARKING_LOT_ID } from "../../mocks/data";
 import { QUERY_KEYS } from "../../constants/queryKeys";
+import { isAfter } from "date-fns";
 
 interface ReservationFormProps {
   spot: IParkingSpot;
@@ -64,6 +65,17 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
     setShowConfirmModal(true);
   };
 
+  const handleClickReserve = () => {
+    if (
+      startTime &&
+      endTime &&
+      isAfter(new Date(endTime), new Date(startTime))
+    ) {
+      setShowConfirmModal(true);
+    }
+    return;
+  };
+
   const handleConfirm = async () => {
     if (!formData) return;
 
@@ -105,9 +117,7 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
           <h3 className="font-semibold mb-2">예약 시간 선택</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm text-gray-600 mb-1">
-                시작 시간
-              </label>
+              <label className="block text-sm text-white mb-1">시작 시간</label>
               <input
                 type="datetime-local"
                 className={`w-full border rounded-md px-3 py-2 ${
@@ -123,9 +133,7 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
               )}
             </div>
             <div>
-              <label className="block text-sm text-gray-600 mb-1">
-                종료 시간
-              </label>
+              <label className="block text-sm text-white mb-1">종료 시간</label>
               <input
                 type="datetime-local"
                 className={`w-full border rounded-md px-3 py-2 ${
@@ -159,7 +167,7 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
           className="w-full"
           disabled={isSubmitting || Object.keys(errors).length > 0}
           isLoading={isSubmitting}
-          onClick={() => setShowConfirmModal(true)}
+          onClick={handleClickReserve}
         >
           예약하기
         </Button>
@@ -185,17 +193,17 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
       >
         <div className="space-y-4">
           <p>다음 내용으로 예약하시겠습니까?</p>
-          <div className="bg-gray-50 p-4 rounded-md space-y-2">
+          <div className="bg-black p-4 rounded-md space-y-2">
             <div className="flex justify-between">
-              <span className="text-gray-600">시작 시간</span>
+              <span className="text-white pr-2">시작 시간</span>
               <span>{new Date(startTime).toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">종료 시간</span>
+              <span className="text-white pr-2">종료 시간</span>
               <span>{new Date(endTime).toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">총 예약 시간</span>
+              <span className="text-white">총 예약 시간</span>
               <span>{calculateTotalTime(startTime, endTime)}</span>
             </div>
             <div className="flex justify-between font-semibold">
