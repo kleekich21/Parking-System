@@ -28,8 +28,12 @@ export async function fetchReservations(): Promise<IReservation[]> {
 
 export async function fetchReservation(
   parkingSpotNumber: number
-): Promise<IReservation> {
+): Promise<IReservation | null> {
   const response = await fetch(`/api/reservations/${parkingSpotNumber}`);
+  // 예약 정보가 없는 경우 404 에러 발생하므로 ErrorBoundary를 우회하기 위해 null 반환.
+  if (response.status === 404) {
+    return null;
+  }
   if (!response.ok) {
     throw new Error("예약 정보를 불러오는데 실패했습니다.");
   }
