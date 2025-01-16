@@ -10,6 +10,7 @@ import ErrorFallback from "./components/ErrorFallback";
 import LoadingFallback from "./components/LoadingFallback";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "./constants/queryKeys";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const queryClient = useQueryClient();
@@ -63,9 +64,33 @@ function App() {
   );
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Suspense fallback={<LoadingFallback />}>{renderContent()}</Suspense>
-    </ErrorBoundary>
+    <>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <Suspense fallback={<LoadingFallback />}>{renderContent()}</Suspense>
+      </ErrorBoundary>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+          success: {
+            duration: 3000,
+            style: {
+              background: "#22c55e",
+            },
+          },
+          error: {
+            duration: 3000,
+            style: {
+              background: "#ef4444",
+            },
+          },
+        }}
+      />
+    </>
   );
 }
 
