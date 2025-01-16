@@ -1,11 +1,5 @@
 import { IParkingSpot, ParkingSpotStatus } from "../types/parking";
-import {
-  FaCar,
-  FaWheelchair,
-  FaChargingStation,
-  FaFemale,
-  FaUserAlt,
-} from "react-icons/fa";
+import { getTypeIcon } from "../components/common/ParkingIcons";
 
 interface ParkingSpotProps {
   spot: IParkingSpot;
@@ -48,21 +42,6 @@ const getStatusText = (
       return "예약 불가";
     default:
       return "상태 없음";
-  }
-};
-
-const getTypeIcon = (type: IParkingSpot["parkingSpotType"]) => {
-  switch (type) {
-    case "DISABLED":
-      return <FaWheelchair className="text-blue-600" />;
-    case "EV":
-      return <FaChargingStation className="text-green-600" />;
-    case "WOMEN":
-      return <FaFemale className="text-pink-600" />;
-    case "ELDERLY":
-      return <FaUserAlt className="text-purple-600" />;
-    default:
-      return <FaCar className="text-gray-600" />;
   }
 };
 
