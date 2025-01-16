@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Button from "../common/Button";
+import Modal from "../common/Modal";
 import { useReserveSpot } from "../../hooks/useReservation";
 import { IParkingSpot } from "../../types/parking";
 import { calculateTotalTime, calculatePrice } from "../../utils";
@@ -38,6 +40,8 @@ type FormValues = z.infer<typeof reservationSchema>;
 
 function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
   const queryClient = useQueryClient();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [formData, setFormData] = useState<FormValues | null>(null);
   const {
     register,
     handleSubmit,
@@ -54,13 +58,21 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
   const startTime = watch("startTime");
   const endTime = watch("endTime");
 
-  const onSubmit = async (data: FormValues) => {
+  const handleFormSubmit = (data: FormValues) => {
+    setFormData(data);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirm = async () => {
+    if (!formData) return;
+
     try {
       await reserveMutation.mutateAsync({
         parkingSpotNumber,
-        startTime: data.startTime,
-        endTime: data.endTime,
+        startTime: formData.startTime,
+        endTime: formData.endTime,
       });
+      setShowConfirmModal(false);
       onSuccess();
       // 예약 내역 업데이트 후 주차장 현황 리페치
       queryClient.invalidateQueries({
@@ -75,69 +87,116 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 border-t pt-4">
-      <div>
-        <h3 className="font-semibold mb-2">예약 시간 선택</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              시작 시간
-            </label>
-            <input
-              type="datetime-local"
-              className={`w-full border rounded-md px-3 py-2 ${
-                errors.startTime ? "border-red-500" : "border-gray-300"
-              }`}
-              min={new Date().toISOString().slice(0, 16)}
-              {...register("startTime")}
-            />
-            {errors.startTime && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.startTime.message}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              종료 시간
-            </label>
-            <input
-              type="datetime-local"
-              className={`w-full border rounded-md px-3 py-2 ${
-                errors.endTime ? "border-red-500" : "border-gray-300"
-              }`}
-              min={startTime}
-              {...register("endTime")}
-            />
-            {errors.endTime && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.endTime.message}
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t pt-4">
-        <div className="flex justify-between mb-2">
-          <span>총 예약 시간</span>
-          <span>{calculateTotalTime(startTime, endTime)}</span>
-        </div>
-        <div className="flex justify-between font-semibold">
-          <span>결제 금액</span>
-          <span>{`${calculatePrice(startTime, endTime, 500)}`}원</span>
-        </div>
-      </div>
-
-      <Button
-        type="primary"
-        className="w-full"
-        disabled={isSubmitting || Object.keys(errors).length > 0}
-        isLoading={isSubmitting}
+    <>
+      <form
+        onSubmit={handleSubmit(handleFormSubmit)}
+        className="space-y-6 border-t pt-4"
       >
-        예약하기
-      </Button>
-    </form>
+        <div>
+          <h3 className="font-semibold mb-2">예약 시간 선택</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm text-gray-600 mb-1">
+                시작 시간
+              </label>
+              <input
+                type="datetime-local"
+                className={`w-full border rounded-md px-3 py-2 ${
+                  errors.startTime ? "border-red-500" : "border-gray-300"
+                }`}
+                min={new Date().toISOString().slice(0, 16)}
+                {...register("startTime")}
+              />
+              {errors.startTime && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.startTime.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm text-gray-600 mb-1">
+                종료 시간
+              </label>
+              <input
+                type="datetime-local"
+                className={`w-full border rounded-md px-3 py-2 ${
+                  errors.endTime ? "border-red-500" : "border-gray-300"
+                }`}
+                min={startTime}
+                {...register("endTime")}
+              />
+              {errors.endTime && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.endTime.message}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t pt-4">
+          <div className="flex justify-between mb-2">
+            <span>총 예약 시간</span>
+            <span>{calculateTotalTime(startTime, endTime)}</span>
+          </div>
+          <div className="flex justify-between font-semibold">
+            <span>결제 금액</span>
+            <span>{`${calculatePrice(startTime, endTime, 500)}`}원</span>
+          </div>
+        </div>
+
+        <Button
+          type="primary"
+          className="w-full"
+          disabled={isSubmitting || Object.keys(errors).length > 0}
+          isLoading={isSubmitting}
+          onClick={() => setShowConfirmModal(true)}
+        >
+          예약하기
+        </Button>
+      </form>
+      <Modal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        title="예약 확인"
+        footer={
+          <>
+            <Button type="secondary" onClick={() => setShowConfirmModal(false)}>
+              취소
+            </Button>
+            <Button
+              type="primary"
+              onClick={handleConfirm}
+              isLoading={reserveMutation.isPending}
+            >
+              확인
+            </Button>
+          </>
+        }
+      >
+        <div className="space-y-4">
+          <p>다음 내용으로 예약하시겠습니까?</p>
+          <div className="bg-gray-50 p-4 rounded-md space-y-2">
+            <div className="flex justify-between">
+              <span className="text-gray-600">시작 시간</span>
+              <span>{new Date(startTime).toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">종료 시간</span>
+              <span>{new Date(endTime).toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">총 예약 시간</span>
+              <span>{calculateTotalTime(startTime, endTime)}</span>
+            </div>
+            <div className="flex justify-between font-semibold">
+              <span>결제 금액</span>
+              <span>{`${calculatePrice(startTime, endTime, 500)}`}원</span>
+            </div>
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 }
 
