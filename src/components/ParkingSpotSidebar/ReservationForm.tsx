@@ -37,10 +37,7 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
         queryKey: QUERY_KEYS.PARKING.PARKING_LOT(PARKING_LOT_ID),
       });
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.RESERVATION.LIST,
-      });
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.RESERVATION.DETAIL(parkingSpotNumber),
+        queryKey: QUERY_KEYS.RESERVATION.ALL,
       });
     } catch (error) {
       console.error("예약 실패:", error);
@@ -82,13 +79,11 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
       <div className="border-t pt-4">
         <div className="flex justify-between mb-2">
           <span>총 예약 시간</span>
-          <span>{calculateTotalTime(startTime, endTime)}분</span>
+          <span>{calculateTotalTime(startTime, endTime)}</span>
         </div>
         <div className="flex justify-between font-semibold">
           <span>결제 금액</span>
-          <span>
-            {calculatePrice(startTime, endTime, 500).toLocaleString()}원
-          </span>
+          <span>{`${calculatePrice(startTime, endTime, 500)}`}원</span>
         </div>
       </div>
 
