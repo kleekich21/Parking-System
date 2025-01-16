@@ -40,43 +40,60 @@ export const handlers = [
     );
   }),
 
-  // 특정 주차면의 현재 활성화된 예약 조회 API
-  http.get("/api/reservations/spot/:spotNumber/active", async ({ params }) => {
-    await delay(ARTIFICIAL_DELAY_MS);
-    const spotNumber = Number(params.spotNumber);
-
-    const activeReservation = reservations.find(
-      (r) => r.parkingSpotNumber === spotNumber && r.status === "ACTIVE"
-    );
-
-    if (activeReservation) {
-      return HttpResponse.json(activeReservation);
-    }
-
-    return HttpResponse.json();
-  }),
-
   // 예약 취소 API
-  http.patch("/api/reservations/:id/cancel", async ({ params }) => {
-    await delay(ARTIFICIAL_DELAY_MS);
-    const { id } = params;
-    const reservation = reservations.find((r) => r.id === id);
+  http.delete(
+    "/api/reservations/:parkingSpotNumber/cancel",
+    async ({ params }) => {
+      await delay(ARTIFICIAL_DELAY_MS);
+      const { parkingSpotNumber } = params;
+      const reservation = reservations.find(
+        (r) => r.parkingSpotNumber === Number(parkingSpotNumber)
+      );
 
-    if (reservation && reservation.status === "ACTIVE") {
-      reservation.status = "CANCELLED";
-      return HttpResponse.json({ success: true, reservation });
+      if (reservation) {
+        console.log("reservation", reservation);
+
+        // 예약 내역 업데이트
+        const reservationIndex = reservations.findIndex(
+          (r) => r.parkingSpotId === parkingSpotNumber
+        );
+        reservations.splice(reservationIndex, 1);
+
+        const selectedSpot = exampleParkingLot.parkingSpots.find(
+          (spot) => spot.parkingSpotNumber === Number(parkingSpotNumber)
+        );
+        // 주차면 상태 업데이트
+        selectedSpot!.status = "EMPTY";
+
+        // 주차장 현황 업데이트
+        exampleParkingLot.availableParkingSpots += 1;
+
+        if (selectedSpot!.parkingSpotType === "EV") {
+          exampleParkingLot.evCharging.available += 1;
+        }
+
+        if (selectedSpot?.evCharger?.chargingSpeed === "SLOW") {
+          exampleParkingLot.evCharging.slowCharging.available += 1;
+        }
+
+        if (selectedSpot?.evCharger?.chargingSpeed === "FAST") {
+          exampleParkingLot.evCharging.fastCharging.available += 1;
+        }
+
+        return HttpResponse.json({ success: true, reservation });
+      }
+
+      return HttpResponse.json(
+        {
+          error: "Cannot cancel reservation",
+          reason: reservation
+            ? "Reservation is not active"
+            : "Reservation not found",
+        },
+        { status: 400 }
+      );
     }
-
-    return HttpResponse.json(
-      {
-        error: "Cannot cancel reservation",
-        reason: reservation
-          ? "Reservation is not active"
-          : "Reservation not found",
-      },
-      { status: 400 }
-    );
-  }),
+  ),
 
   // 새로운 예약 생성 API
   http.post("/api/reserve", async ({ request }) => {
