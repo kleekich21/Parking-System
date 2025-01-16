@@ -80,6 +80,7 @@ export function ParkingSpot({
         transition-all duration-200
         hover:shadow-md
         cursor-pointer
+        min-h-[150px]
       `}
       onClick={() => onSelect?.(spot)}
     >

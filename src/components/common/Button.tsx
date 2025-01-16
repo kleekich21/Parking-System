@@ -5,44 +5,76 @@ type ButtonType = "primary" | "secondary" | "danger";
 interface ButtonProps {
   type?: ButtonType;
   isLoading?: boolean;
-  children?: React.ReactNode;
-  disabled?: boolean;
+  children: React.ReactNode;
   className?: string;
-  onClick?: () => void;
+  disabled?: boolean;
 }
 
-const typeStyles: Record<ButtonType, string> = {
-  primary: "bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-200",
-  secondary: "bg-gray-500 text-gray-700 hover:bg-gray-200 focus:ring-gray-200",
-  danger: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-200",
-};
-
 function Button({
-  type = "primary",
-  isLoading = false,
   children,
-  disabled,
+  type = "primary",
+  isLoading,
   className = "",
-  onClick,
+  disabled,
   ...props
 }: ButtonProps) {
+  const baseStyles = `
+    border-radius-8px
+    border
+    border-solid
+    border-transparent
+    px-5
+    py-2.5
+    text-base
+    font-medium
+    font-inherit
+    cursor-pointer
+    transition-all
+    duration-250
+    disabled:opacity-50
+    disabled:cursor-not-allowed
+    focus:outline-4
+    focus:outline-offset-1
+    focus:-outline-focus-ring-color
+    rounded-md
+  `;
+
+  const typeStyles = {
+    primary: `
+      bg-blue-900
+      text-white
+      hover:border-indigo-500
+      active:bg-blue-800
+    `,
+    secondary: `
+      bg-white
+      text-gray-900
+      border-gray-200
+      hover:border-indigo-500
+      active:bg-gray-500
+    `,
+    danger: `
+      bg-red-600
+      text-white
+      hover:border-red-400
+      active:bg-red-700
+    `,
+  };
+
   return (
     <button
       className={`
-        inline-flex items-center justify-center
-        rounded-md font-medium
-        transition-colors duration-200
-        focus:outline-none focus:ring-2 focus:ring-offset-2
-        disabled:opacity-50 disabled:cursor-not-allowed
+        ${baseStyles}
         ${typeStyles[type]}
         ${className}
       `}
-      onClick={onClick}
-      disabled={disabled || isLoading}
+      disabled={isLoading || disabled}
       {...props}
     >
-      {isLoading && <ClipLoader size={14} color="#ffffff" className="mr-2" />}
-      {children}
+      <div className="flex items-center justify-center gap-2">
+        {isLoading && <ClipLoader size={14} color="currentColor" />}
+        {children}
+      </div>
     </button>
   );
 }
