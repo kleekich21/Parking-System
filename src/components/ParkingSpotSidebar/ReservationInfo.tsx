@@ -46,9 +46,9 @@ function ReservationInfo({ reservation, onCancel }: ReservationInfoProps) {
 
   return (
     <>
-      <div className="space-y-6 border-t bg-gray-50 p-4">
+      <div className="space-y-6 border-tp-4">
         {isReservedByCurrentUser(parkingSpotNumber) ? (
-          <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+          <div className="border border-blue-200 rounded-md p-4">
             <p className="text-blue-700 text-center text-lg font-semibold">
               예약완료
             </p>

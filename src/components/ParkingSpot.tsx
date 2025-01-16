@@ -12,17 +12,17 @@ const getStatusColor = (
   isReservedByCurrentUser: boolean
 ) => {
   if (isReservedByCurrentUser) {
-    return "bg-blue-100 border-blue-500";
+    return "bg-blue-900 border-blue-500";
   }
 
   switch (status) {
     case "EMPTY":
-      return "bg-green-100 border-green-500";
+      return "bg-green-900 border-green-500";
     case "OCCUPIED":
     case "RESERVED":
-      return "bg-red-100 border-red-500";
+      return "bg-red-900 border-red-500";
     default:
-      return "bg-gray-100 border-gray-500";
+      return "bg-gray-900 border-gray-500";
   }
 };
 
@@ -78,7 +78,7 @@ export function ParkingSpot({
       <div className="text-2xl font-bold mb-2">#{parkingSpotNumber}</div>
       <div className="text-sm">{statusText}</div>
       {evCharger && (
-        <div className="mt-2 text-xs text-gray-600">
+        <div className="mt-2 text-xs text-white">
           <div>충전 타입: {evCharger.chargingType}</div>
           <div>
             충전 속도: {evCharger.chargingSpeed === "FAST" ? "급속" : "완속"}

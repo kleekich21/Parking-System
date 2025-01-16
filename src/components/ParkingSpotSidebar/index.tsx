@@ -42,7 +42,7 @@ export function ParkingSpotSidebar({
             </div>
           ) : (
             <div className="p-4">
-              <p className="text-green-700">예약 가능</p>
+              <p className="text-green-400">예약 가능</p>
             </div>
           )}
           <div className="flex gap-2 items-center">

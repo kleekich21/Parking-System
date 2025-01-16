@@ -31,8 +31,9 @@ function Modal({
       <div className="flex min-h-full items-center justify-center p-4">
         <div
           className={`
-            relative transform overflow-hidden rounded-lg bg-white
-            shadow-xl transition-all w-full}
+            relative transform overflow-hidden rounded-lg bg-black
+            shadow-xl transition-all
+            w-full max-w-md
           `}
           onClick={(e) => e.stopPropagation()}
         >
@@ -48,7 +49,7 @@ function Modal({
 
           {/* Footer(버튼 영역) */}
           {footer && (
-            <div className="px-6 py-4 border-t bg-gray-50 flex justify-end space-x-2">
+            <div className="px-6 py-4 border-t bg-black flex justify-between space-x-2">
               {footer}
             </div>
           )}
