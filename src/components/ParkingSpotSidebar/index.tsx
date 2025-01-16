@@ -6,6 +6,7 @@ import ReservationForm from "./ReservationForm";
 import ReservationInfo from "./ReservationInfo";
 import EVChargerInfo from "./EVChargerInfo";
 import CancelReservationModal from "./CancelReservationModal";
+
 import { currentUser } from "../../mocks/data";
 
 interface ParkingSpotSidebarProps {
@@ -47,12 +48,6 @@ export function ParkingSpotSidebar({
         {status === "EMPTY" && (
           <ReservationForm spot={spot} onSuccess={onClose} />
         )}
-        {/* {reservation && (
-          <ReservationInfo
-            reservation={reservation}
-            // onCancelClick={() => setShowCancelModal(true)}
-          />
-        )} */}
       </>
     );
   };
