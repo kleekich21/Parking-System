@@ -47,7 +47,7 @@ function ReservationInfo({ reservation, onCancel }: ReservationInfoProps) {
 
   return (
     <>
-      <div className="space-y-6">
+      <div className="space-y-6 border-t bg-gray-50 p-4">
         {isReservedByCurrentUser ? (
           <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
             <p className="text-blue-700 text-center text-lg font-semibold">
