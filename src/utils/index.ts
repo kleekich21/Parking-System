@@ -7,6 +7,7 @@ export const calculateTotalMinutes = (startTime: string, endTime: string) => {
 
 export const calculateTotalTime = (startTime: string, endTime: string) => {
   if (!startTime || !endTime) return "0분";
+  if (new Date(endTime) < new Date(startTime)) return "0분";
 
   const totalMinutes = calculateTotalMinutes(startTime, endTime);
   const hours = Math.floor(totalMinutes / 60);
