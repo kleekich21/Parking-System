@@ -25,5 +25,5 @@ export const calculateFee = (
   feePerTenMinutes: number
 ) => {
   const totalMinutes = calculateTotalMinutes(startTime, endTime);
-  return Math.ceil(totalMinutes / 60) * feePerTenMinutes;
+  return Math.ceil(totalMinutes / 60) * feePerTenMinutes || 0;
 };

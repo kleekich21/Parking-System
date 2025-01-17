@@ -8,6 +8,8 @@ import { PARKING_LOT_ID } from "../../mocks/data";
 import { useCancelReservation } from "../../hooks/useReservation";
 import CancelReservationModal from "./CancelReservationModal";
 import { useCurrentUserReservations } from "../../hooks/useReservation";
+import { useParkingLot } from "../../hooks/useParking";
+import { calculateTotalTime, calculateFee } from "../../utils";
 interface ReservationInfoProps {
   reservation: IReservation;
   onCancel?: () => void;
@@ -19,6 +21,13 @@ function ReservationInfo({ reservation, onCancel }: ReservationInfoProps) {
   const cancelReservationMutation = useCancelReservation();
   const { id, startTime, endTime, parkingSpotNumber } = reservation;
   const { isReservedByCurrentUser } = useCurrentUserReservations();
+  const { data: parkingLot } = useParkingLot(PARKING_LOT_ID);
+  const totalTime = calculateTotalTime(startTime, endTime);
+  const totalFee = calculateFee(
+    startTime,
+    endTime,
+    parkingLot?.feePerTenMinutes ?? 0
+  );
 
   const handleCancelClick = async () => {
     const toastId = toast.loading("예약 처리 중...");
@@ -57,6 +66,8 @@ function ReservationInfo({ reservation, onCancel }: ReservationInfoProps) {
               <p>예약 번호: {id}</p>
               <p>시작 시간: {new Date(startTime).toLocaleString()}</p>
               <p>종료 시간: {new Date(endTime).toLocaleString()}</p>
+              <p>총 예약 시간: {totalTime}</p>
+              <p>총 결제 금액: {totalFee}원</p>
             </div>
             <Button
               type="danger"

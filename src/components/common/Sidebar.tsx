@@ -21,7 +21,7 @@ function Sidebar({
     <>
       {/* Sidebar */}
       <div
-        className={`fixed top-0 bottom-0 bg-black/30 shadow-xl z-50 transition-transform duration-300
+        className={`fixed top-0 bottom-0 bg-black shadow-xl z-50 transition-transform duration-300
           ${position === "right" ? "right-0" : "left-0"}
           ${
             isOpen
