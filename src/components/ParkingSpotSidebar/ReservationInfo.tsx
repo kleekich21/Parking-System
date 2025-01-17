@@ -36,13 +36,15 @@ function ReservationInfo({ reservation, onCancel }: ReservationInfoProps) {
       toast.success("예약이 취소되었습니다.", { id: toastId });
       setShowCancelModal(false);
       onCancel?.();
-      // 예약 내역 업데이트 후 주차장 현황 리페치
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.PARKING.PARKING_LOT(PARKING_LOT_ID),
-      });
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.RESERVATION.ALL,
-      });
+      await Promise.all([
+        // 예약 내역 업데이트 후 주차장 현황 리페치
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.PARKING.PARKING_LOT(PARKING_LOT_ID),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.RESERVATION.ALL,
+        }),
+      ]);
     } catch (error) {
       toast.error(
         error instanceof Error
