@@ -3,15 +3,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Button from "../common/Button";
-import Modal from "../common/Modal";
+// import Modal from "../common/Modal";
 import toast from "react-hot-toast";
 import { useReserveSpot } from "../../hooks/useReservation";
+import { useParkingLot } from "../../hooks/useParking";
 import { IParkingSpot } from "../../types/parking";
 import { calculateTotalTime, calculatePrice } from "../../utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { PARKING_LOT_ID } from "../../mocks/data";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { isAfter } from "date-fns";
+import ReservationConfirmModal from "./ReservationConfirmModal";
 
 interface ReservationFormProps {
   spot: IParkingSpot;
@@ -41,6 +43,8 @@ const reservationSchema = z
 type FormValues = z.infer<typeof reservationSchema>;
 
 function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
+  const { data: parkingLot } = useParkingLot(PARKING_LOT_ID);
+  const feePerTenMinutes = parkingLot?.feePerTenMinutes;
   const queryClient = useQueryClient();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [formData, setFormData] = useState<FormValues | null>(null);
@@ -158,7 +162,9 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
           </div>
           <div className="flex justify-between font-semibold">
             <span>결제 금액</span>
-            <span>{`${calculatePrice(startTime, endTime, 500)}`}원</span>
+            <span>
+              {`${calculatePrice(startTime, endTime, feePerTenMinutes)}`}원
+            </span>
           </div>
         </div>
 
@@ -172,47 +178,15 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
           예약하기
         </Button>
       </form>
-      <Modal
+      <ReservationConfirmModal
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
-        title="예약 확인"
-        footer={
-          <>
-            <Button type="secondary" onClick={() => setShowConfirmModal(false)}>
-              취소
-            </Button>
-            <Button
-              type="primary"
-              onClick={handleConfirm}
-              isLoading={reserveMutation.isPending}
-            >
-              확인
-            </Button>
-          </>
-        }
-      >
-        <div className="space-y-4">
-          <p>다음 내용으로 예약하시겠습니까?</p>
-          <div className="bg-black p-4 rounded-md space-y-2">
-            <div className="flex justify-between">
-              <span className="text-white pr-2">시작 시간</span>
-              <span>{new Date(startTime).toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-white pr-2">종료 시간</span>
-              <span>{new Date(endTime).toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-white">총 예약 시간</span>
-              <span>{calculateTotalTime(startTime, endTime)}</span>
-            </div>
-            <div className="flex justify-between font-semibold">
-              <span>결제 금액</span>
-              <span>{`${calculatePrice(startTime, endTime, 500)}`}원</span>
-            </div>
-          </div>
-        </div>
-      </Modal>
+        onConfirm={handleConfirm}
+        isLoading={reserveMutation.isPending}
+        startTime={startTime}
+        endTime={endTime}
+        feePerTenMinutes={feePerTenMinutes}
+      />
     </>
   );
 }
