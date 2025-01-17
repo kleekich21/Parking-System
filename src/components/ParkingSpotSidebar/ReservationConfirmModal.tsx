@@ -1,6 +1,5 @@
 import Button from "../common/Button";
 import Modal from "../common/Modal";
-import { calculatePrice, calculateTotalTime } from "../../utils";
 
 interface ReservationConfirmModalProps {
   isOpen: boolean;
@@ -9,7 +8,8 @@ interface ReservationConfirmModalProps {
   isLoading?: boolean;
   startTime: string;
   endTime: string;
-  feePerTenMinutes: number;
+  totalTime: string;
+  totalFee: number;
 }
 
 function ReservationConfirmModal({
@@ -19,7 +19,8 @@ function ReservationConfirmModal({
   isLoading,
   startTime,
   endTime,
-  feePerTenMinutes,
+  totalTime,
+  totalFee,
 }: ReservationConfirmModalProps) {
   return (
     <Modal
@@ -50,18 +51,11 @@ function ReservationConfirmModal({
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-white">총 예약 시간</span>
-            <span>{calculateTotalTime(startTime, endTime)}</span>
+            <span>{totalTime}</span>
           </div>
           <div className="flex justify-between font-medium">
             <span className="text-white">결제 금액</span>
-            <span>
-              {calculatePrice(
-                startTime,
-                endTime,
-                feePerTenMinutes
-              ).toLocaleString()}
-              원
-            </span>
+            <span>{totalFee}원</span>
           </div>
         </div>
       </div>

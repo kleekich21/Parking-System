@@ -3,12 +3,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Button from "../common/Button";
-// import Modal from "../common/Modal";
 import toast from "react-hot-toast";
 import { useReserveSpot } from "../../hooks/useReservation";
 import { useParkingLot } from "../../hooks/useParking";
 import { IParkingSpot } from "../../types/parking";
-import { calculateTotalTime, calculatePrice } from "../../utils";
+import { calculateTotalTime, calculateFee } from "../../utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { PARKING_LOT_ID } from "../../mocks/data";
 import { QUERY_KEYS } from "../../constants/queryKeys";
@@ -110,6 +109,8 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
       );
     }
   };
+  const totalTime = calculateTotalTime(startTime, endTime);
+  const totalFee = calculateFee(startTime, endTime, feePerTenMinutes);
 
   return (
     <>
@@ -158,13 +159,11 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
         <div className="border-t pt-4">
           <div className="flex justify-between mb-2">
             <span>총 예약 시간</span>
-            <span>{calculateTotalTime(startTime, endTime)}</span>
+            <span>{totalTime}</span>
           </div>
           <div className="flex justify-between font-semibold">
             <span>결제 금액</span>
-            <span>
-              {`${calculatePrice(startTime, endTime, feePerTenMinutes)}`}원
-            </span>
+            <span>{totalFee}원</span>
           </div>
         </div>
 
@@ -185,7 +184,8 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
         isLoading={reserveMutation.isPending}
         startTime={startTime}
         endTime={endTime}
-        feePerTenMinutes={feePerTenMinutes}
+        totalTime={totalTime}
+        totalFee={totalFee}
       />
     </>
   );

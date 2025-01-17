@@ -38,6 +38,7 @@ export interface IParkingLot {
   address: string;
   totalParkingSpots: number;
   availableParkingSpots: number;
+  feePerTenMinutes: number;
   evCharging: {
     total: number;
     available: number;

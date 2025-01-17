@@ -17,6 +17,7 @@ export function ParkingLotInfo({ parkingLot }: ParkingLotInfoProps) {
     <div className=" p-4 rounded-lg shadow">
       <h2 className="text-xl font-semibold mb-2">{parkingLot.name}</h2>
       <p className="text-white">{parkingLot.address}</p>
+      <p className="text-white">{parkingLot.feePerTenMinutes}원/10분</p>
 
       <div className="mt-4 grid grid-cols-2 gap-4">
         <div className="p-3 rounded">

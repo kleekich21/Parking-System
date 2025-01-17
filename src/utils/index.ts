@@ -19,11 +19,11 @@ export const calculateTotalTime = (startTime: string, endTime: string) => {
   return `${hours}시간 ${minutes}분`;
 };
 
-export const calculatePrice = (
+export const calculateFee = (
   startTime: string,
   endTime: string,
-  pricePerTenMinutes: number
+  feePerTenMinutes: number
 ) => {
   const totalMinutes = calculateTotalMinutes(startTime, endTime);
-  return Math.ceil(totalMinutes / 60) * pricePerTenMinutes;
+  return Math.ceil(totalMinutes / 60) * feePerTenMinutes;
 };

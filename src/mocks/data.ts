@@ -15,6 +15,7 @@ export const exampleParkingLot: IParkingLot = {
   address: "서울특별시 중구 세종대로 110",
   totalParkingSpots: 20,
   availableParkingSpots: 13,
+  feePerTenMinutes: 500,
   evCharging: {
     total: 6,
     available: 4,
