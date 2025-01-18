@@ -3,7 +3,6 @@ import { IParkingSpot, ParkingSpotStatus } from "../types/parking";
 import { getTypeIcon } from "../components/common/ParkingIcons";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../constants/queryKeys";
-import { useParams } from "react-router-dom";
 
 const getStatusColor = (
   status: ParkingSpotStatus,
@@ -55,7 +54,6 @@ export function ParkingSpot({
   // 주차면 선택 시 주차면 번호를 파라미터로 전달
   const [, setSearchParams] = useSearchParams();
   const queryClient = useQueryClient();
-  const { parkingLotId } = useParams();
   const { parkingSpotNumber, status, parkingSpotType, evCharger } = spot;
 
   const handleClick = async () => {
@@ -63,7 +61,7 @@ export function ParkingSpot({
     await Promise.all([
       // 간단하게 navigate 해주는 것으로 대체 가능하지만, mocking 서버로 인한 한계로 쿼리 무효화를 통해 처리
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.PARKING.PARKING_LOT(parkingLotId!),
+        queryKey: QUERY_KEYS.PARKING.ALL,
       }),
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.RESERVATION.DETAIL(Number(parkingSpotNumber)),

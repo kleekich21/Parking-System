@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Button from "../common/Button";
@@ -9,7 +10,6 @@ import { useParkingLot } from "../../hooks/useParking";
 import { IParkingSpot } from "../../types/parking";
 import { calculateTotalTime, calculateFee } from "../../utils";
 import { useQueryClient } from "@tanstack/react-query";
-import { PARKING_LOT_ID } from "../../mocks/data";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { isAfter } from "date-fns";
 import ReservationConfirmModal from "./ReservationConfirmModal";
@@ -42,7 +42,8 @@ const reservationSchema = z
 type FormValues = z.infer<typeof reservationSchema>;
 
 function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
-  const { data: parkingLot } = useParkingLot(PARKING_LOT_ID);
+  const { parkingLotId } = useParams<{ parkingLotId: string }>();
+  const { data: parkingLot } = useParkingLot(parkingLotId!);
   const feePerTenMinutes = parkingLot?.feePerTenMinutes;
   const queryClient = useQueryClient();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -97,7 +98,7 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
       await Promise.all([
         // 예약 내역 업데이트 후 주차장 현황 리페치
         queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.PARKING.PARKING_LOT(PARKING_LOT_ID),
+          queryKey: QUERY_KEYS.PARKING.ALL,
         }),
         queryClient.invalidateQueries({
           queryKey: QUERY_KEYS.RESERVATION.ALL,

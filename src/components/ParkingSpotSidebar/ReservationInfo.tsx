@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { IReservation } from "../../types/parking";
 import Button from "../common/Button";
 import toast from "react-hot-toast";
 import { QUERY_KEYS } from "../../constants/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
-import { PARKING_LOT_ID } from "../../mocks/data";
 import { useCancelReservation } from "../../hooks/useReservation";
 import CancelReservationModal from "./CancelReservationModal";
 import { useCurrentUserReservations } from "../../hooks/useReservation";
@@ -16,12 +16,13 @@ interface ReservationInfoProps {
 }
 
 function ReservationInfo({ reservation, onCancel }: ReservationInfoProps) {
+  const { parkingLotId } = useParams<{ parkingLotId: string }>();
   const queryClient = useQueryClient();
   const [showCancelModal, setShowCancelModal] = useState(false);
   const cancelReservationMutation = useCancelReservation();
   const { id, startTime, endTime, parkingSpotNumber } = reservation;
   const { isReservedByCurrentUser } = useCurrentUserReservations();
-  const { data: parkingLot } = useParkingLot(PARKING_LOT_ID);
+  const { data: parkingLot } = useParkingLot(parkingLotId!);
   const totalTime = calculateTotalTime(startTime, endTime);
   const totalFee = calculateFee(
     startTime,
@@ -40,7 +41,7 @@ function ReservationInfo({ reservation, onCancel }: ReservationInfoProps) {
       await Promise.all([
         // 예약 내역 업데이트 후 주차장 현황 리페치
         queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.PARKING.PARKING_LOT(PARKING_LOT_ID),
+          queryKey: QUERY_KEYS.PARKING.ALL,
         }),
         queryClient.invalidateQueries({
           queryKey: QUERY_KEYS.RESERVATION.ALL,
