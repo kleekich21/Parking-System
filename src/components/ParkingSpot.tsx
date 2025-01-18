@@ -1,4 +1,5 @@
 import { useSearchParams } from "react-router-dom";
+import { memo, useCallback } from "react";
 import { IParkingSpot, ParkingSpotStatus } from "../types/parking";
 import { getTypeIcon } from "../components/common/ParkingIcons";
 import { useQueryClient } from "@tanstack/react-query";
@@ -56,7 +57,7 @@ export function ParkingSpot({
   const queryClient = useQueryClient();
   const { parkingSpotNumber, status, parkingSpotType, evCharger } = spot;
 
-  const handleClick = async () => {
+  const handleClick = useCallback(async () => {
     // 먼저 쿼리 무효화를 통해 예약 정보 업데이트 후 주차장 현황 리페치
     await Promise.all([
       // 간단하게 navigate 해주는 것으로 대체 가능하지만, mocking 서버로 인한 한계로 쿼리 무효화를 통해 처리
@@ -76,7 +77,7 @@ export function ParkingSpot({
       prev.set("spot", parkingSpotNumber.toString());
       return prev;
     });
-  };
+  }, [parkingSpotNumber, setSearchParams, queryClient]);
 
   const statusText = getStatusText(status, isReservedByCurrentUser);
 
@@ -111,4 +112,4 @@ export function ParkingSpot({
   );
 }
 
-export default ParkingSpot;
+export default memo(ParkingSpot);
