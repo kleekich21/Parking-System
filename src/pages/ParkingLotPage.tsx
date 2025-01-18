@@ -6,7 +6,6 @@ import ParkingSpotSidebar from "../components/ParkingSpotSidebar";
 import { Suspense } from "react";
 import ParkingLotInfoSkeleton from "../components/Skeletons/ParkingLotInfoSkeleton";
 import ParkingSpotsSkeleton from "../components/Skeletons/ParkingSpotsSkeleton";
-import ParkingLotSkeleton from "../components/Skeletons/ParkingLotSkeleton";
 import SidebarSkeleton from "../components/Skeletons/SidebarSkeleton";
 
 export default function ParkingLotPage() {
@@ -23,27 +22,25 @@ export default function ParkingLotPage() {
     <div className="container mx-auto p-4 max-w-6xl">
       <h1 className="text-2xl font-bold mb-6">주차장 현황</h1>
       <div className="space-y-6">
-        <Suspense fallback={<ParkingLotSkeleton />}>
-          {/* 주차장 정보 */}
-          <Suspense fallback={<ParkingLotInfoSkeleton />}>
-            <ParkingLotInfo parkingLotId={parkingLotId!} />
-          </Suspense>
-
-          {/* 주차면 목록 */}
-          <Suspense fallback={<ParkingSpotsSkeleton />}>
-            <ParkingLot parkingLotId={parkingLotId!} />
-          </Suspense>
-
-          {/* 사이드바 */}
-          {selectedSpotNumber && (
-            <Suspense fallback={<SidebarSkeleton />}>
-              <ParkingSpotSidebar
-                spot={selectedSpot!}
-                isOpen={!!selectedSpotNumber}
-              />
-            </Suspense>
-          )}
+        {/* 주차장 정보 */}
+        <Suspense fallback={<ParkingLotInfoSkeleton />}>
+          <ParkingLotInfo parkingLotId={parkingLotId!} />
         </Suspense>
+
+        {/* 주차면 목록 */}
+        <Suspense fallback={<ParkingSpotsSkeleton />}>
+          <ParkingLot parkingLotId={parkingLotId!} />
+        </Suspense>
+
+        {/* 사이드바 */}
+        {selectedSpotNumber && (
+          <Suspense fallback={<SidebarSkeleton />}>
+            <ParkingSpotSidebar
+              spot={selectedSpot!}
+              isOpen={!!selectedSpotNumber}
+            />
+          </Suspense>
+        )}
       </div>
     </div>
   );

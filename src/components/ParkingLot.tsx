@@ -1,27 +1,21 @@
-import { IParkingSpot } from "../types/parking";
 import { ParkingSpot } from "./ParkingSpot";
 import { useCurrentUserReservations } from "../hooks/useReservation";
-
+import { useParkingLot } from "../hooks/useParking";
 interface ParkingLotProps {
-  spots?: IParkingSpot[];
-  onSpotSelect?: (spot: IParkingSpot) => void;
+  parkingLotId: string;
 }
 
-export function ParkingLot({ spots, onSpotSelect }: ParkingLotProps) {
+export function ParkingLot({ parkingLotId }: ParkingLotProps) {
+  const { data: parkingLot } = useParkingLot(parkingLotId);
   const { isReservedByCurrentUser } = useCurrentUserReservations();
-
-  if (!spots) {
-    return null;
-  }
 
   return (
     <div className="relative">
       <div className="grid grid-cols-3 gap-4">
-        {spots.map((spot) => (
+        {parkingLot?.parkingSpots.map((spot) => (
           <ParkingSpot
             key={spot.id}
             spot={spot}
-            onSelect={onSpotSelect}
             isReservedByCurrentUser={isReservedByCurrentUser(
               spot.parkingSpotNumber
             )}

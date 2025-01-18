@@ -5,7 +5,7 @@ import { Toaster } from "react-hot-toast";
 
 export function Layout() {
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen w-full bg-black">
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Outlet />
       </ErrorBoundary>

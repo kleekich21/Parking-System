@@ -1,10 +1,12 @@
-import { IParkingLot } from "../types/parking";
+import { useParkingLot } from "../hooks/useParking";
+import { FaChargingStation } from "react-icons/fa";
 
 interface ParkingLotInfoProps {
-  parkingLot?: IParkingLot;
+  parkingLotId: string;
 }
 
-export function ParkingLotInfo({ parkingLot }: ParkingLotInfoProps) {
+export function ParkingLotInfo({ parkingLotId }: ParkingLotInfoProps) {
+  const { data: parkingLot } = useParkingLot(parkingLotId);
   if (!parkingLot) {
     return (
       <div className="bg-gray-800 p-4 rounded-lg shadow">
@@ -36,7 +38,10 @@ export function ParkingLotInfo({ parkingLot }: ParkingLotInfoProps) {
 
       {parkingLot.evCharging.total > 0 && (
         <div className="mt-4 border-t pt-4">
-          <h3 className="text-sm font-semibold mb-2">전기차 충전소 현황</h3>
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="text-lg font-semibold mb-2">전기차 충전소 현황</h3>
+            <FaChargingStation className="text-green-400 text-xl" />
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="p-3 rounded">
               <p className="text-sm text-white">완속 충전</p>
