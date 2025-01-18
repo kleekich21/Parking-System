@@ -1,15 +1,17 @@
 import { http, HttpResponse, delay } from "msw";
 import { IReservation } from "../types/parking";
-import { exampleParkingLot, reservations } from "./data";
+import { parkingLots, parkingLot1, reservations } from "./data";
 const ARTIFICIAL_DELAY_MS = 1000;
 
 export const handlers = [
   http.get("/api/parking-lot/:id", async ({ params }) => {
     await delay(ARTIFICIAL_DELAY_MS);
-    const { id } = params;
-    if (id === exampleParkingLot.id) {
-      return HttpResponse.json(exampleParkingLot);
+    const { id } = params as { id: string };
+
+    if (parkingLots.has(id)) {
+      return HttpResponse.json(parkingLots.get(id)!);
     }
+
     return HttpResponse.json(
       { error: "Parking lot not found" },
       { status: 404 }
@@ -59,25 +61,25 @@ export const handlers = [
         );
         reservations.splice(reservationIndex, 1);
 
-        const selectedSpot = exampleParkingLot.parkingSpots.find(
+        const selectedSpot = parkingLot1.parkingSpots.find(
           (spot) => spot.parkingSpotNumber === Number(parkingSpotNumber)
         );
         // 주차면 상태 업데이트
         selectedSpot!.status = "EMPTY";
 
         // 주차장 현황 업데이트
-        exampleParkingLot.availableParkingSpots += 1;
+        parkingLot1.availableParkingSpots += 1;
 
         if (selectedSpot!.parkingSpotType === "EV") {
-          exampleParkingLot.evCharging.available += 1;
+          parkingLot1.evCharging.available += 1;
         }
 
         if (selectedSpot?.evCharger?.chargingSpeed === "SLOW") {
-          exampleParkingLot.evCharging.slowCharging.available += 1;
+          parkingLot1.evCharging.slowCharging.available += 1;
         }
 
         if (selectedSpot?.evCharger?.chargingSpeed === "FAST") {
-          exampleParkingLot.evCharging.fastCharging.available += 1;
+          parkingLot1.evCharging.fastCharging.available += 1;
         }
 
         return HttpResponse.json({ success: true, reservation });
@@ -119,7 +121,7 @@ export const handlers = [
     // 예약 내역 업데이트
     reservations.push(newReservation);
 
-    const selectedSpot = exampleParkingLot.parkingSpots.find(
+    const selectedSpot = parkingLot1.parkingSpots.find(
       (spot) => spot.parkingSpotNumber === parkingSpotNumber
     );
 
@@ -127,18 +129,18 @@ export const handlers = [
     selectedSpot!.status = "RESERVED";
 
     // 주차장 현황 업데이트
-    exampleParkingLot.availableParkingSpots -= 1;
+    parkingLot1.availableParkingSpots -= 1;
 
     if (selectedSpot!.parkingSpotType === "EV") {
-      exampleParkingLot.evCharging.available -= 1;
+      parkingLot1.evCharging.available -= 1;
     }
 
     if (selectedSpot?.evCharger?.chargingSpeed === "SLOW") {
-      exampleParkingLot.evCharging.slowCharging.available -= 1;
+      parkingLot1.evCharging.slowCharging.available -= 1;
     }
 
     if (selectedSpot?.evCharger?.chargingSpeed === "FAST") {
-      exampleParkingLot.evCharging.fastCharging.available -= 1;
+      parkingLot1.evCharging.fastCharging.available -= 1;
     }
 
     return HttpResponse.json({
