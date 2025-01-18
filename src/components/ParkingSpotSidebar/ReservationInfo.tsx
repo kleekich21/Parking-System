@@ -60,10 +60,8 @@ function ReservationInfo({ reservation, onCancel }: ReservationInfoProps) {
       <div className="space-y-6 border-tp-4">
         {isReservedByCurrentUser(parkingSpotNumber) ? (
           <div className="border border-blue-200 rounded-md p-4">
-            <p className="text-blue-700 text-center text-lg font-semibold">
-              예약완료
-            </p>
-            <h3 className="font-semibold mb-2">예약 정보</h3>
+            <p className="text-center text-lg font-semibold">예약 정보</p>
+            <h3 className="font-semibold mb-2"></h3>
             <div className="space-y-2 text-sm pb-4">
               <p>예약 번호: {id}</p>
               <p>시작 시간: {new Date(startTime).toLocaleString()}</p>
@@ -82,7 +80,7 @@ function ReservationInfo({ reservation, onCancel }: ReservationInfoProps) {
         ) : (
           <>
             <h3 className="font-semibold mb-2">예약 정보</h3>
-            <p>종료 시간: {new Date(endTime).toLocaleString()}</p>
+            <p>예약 가능 시간: {new Date(endTime).toLocaleString()}</p>
           </>
         )}
       </div>
