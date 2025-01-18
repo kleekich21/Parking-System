@@ -93,6 +93,7 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
       toast.success("예약이 완료되었습니다.", { id: toastId });
       setShowConfirmModal(false);
       onSuccess();
+      // 간단하게 navigate 해주는 것으로 대체 가능하지만, mocking 서버로 인한 한계로 쿼리 무효화를 통해 처리
       await Promise.all([
         // 예약 내역 업데이트 후 주차장 현황 리페치
         queryClient.invalidateQueries({

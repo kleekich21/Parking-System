@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom";
 import { IParkingSpot } from "../../types/parking";
 import Sidebar from "../common/Sidebar";
 import { useReservationDetail } from "../../hooks/useReservation";
@@ -10,24 +11,27 @@ import { useCurrentUserReservations } from "../../hooks/useReservation";
 interface ParkingSpotSidebarProps {
   spot: IParkingSpot;
   isOpen: boolean;
-  onClose: () => void;
 }
 
-export function ParkingSpotSidebar({
-  spot,
-  isOpen,
-  onClose,
-}: ParkingSpotSidebarProps) {
+export function ParkingSpotSidebar({ spot, isOpen }: ParkingSpotSidebarProps) {
+  const [, setSearchParams] = useSearchParams();
   const { parkingSpotNumber, status, evCharger } = spot;
   const { isReservedByCurrentUser } = useCurrentUserReservations();
   const { data: reservation } = useReservationDetail({
     parkingSpotNumber,
   });
 
+  const handleClose = () => {
+    setSearchParams((prev) => {
+      prev.delete("spot");
+      return prev;
+    });
+  };
+
   return (
     <Sidebar
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       title={`주차면 #${parkingSpotNumber}`}
     >
       <div className="space-y-6">
@@ -61,11 +65,11 @@ export function ParkingSpotSidebar({
         </div>
 
         {reservation && (
-          <ReservationInfo reservation={reservation} onCancel={onClose} />
+          <ReservationInfo reservation={reservation} onCancel={handleClose} />
         )}
         {evCharger && <EVChargerInfo evCharger={evCharger} />}
         {status === "EMPTY" && (
-          <ReservationForm spot={spot} onSuccess={onClose} />
+          <ReservationForm spot={spot} onSuccess={handleClose} />
         )}
       </div>
     </Sidebar>
