@@ -43,7 +43,7 @@ export const parkingLot1: IParkingLot = {
     {
       id: "3",
       parkingSpotNumber: 3,
-      status: "EMPTY",
+      status: "RESERVED",
       parkingSpotType: "DISABLED",
     },
     {

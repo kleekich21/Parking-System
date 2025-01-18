@@ -53,11 +53,9 @@ export const handlers = [
       );
 
       if (reservation) {
-        console.log("reservation", reservation);
-
         // 예약 내역 업데이트
         const reservationIndex = reservations.findIndex(
-          (r) => r.parkingSpotId === parkingSpotNumber
+          (r) => r.parkingSpotNumber === Number(parkingSpotNumber)
         );
         reservations.splice(reservationIndex, 1);
 
