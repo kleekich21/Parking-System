@@ -30,7 +30,7 @@ function ReservationInfo({ reservation, onCancel }: ReservationInfoProps) {
   );
 
   const handleCancelClick = async () => {
-    const toastId = toast.loading("예약 처리 중...");
+    const toastId = toast.loading("예약 취소 처리 중...");
     try {
       await cancelReservationMutation.mutateAsync(parkingSpotNumber);
       toast.success("예약이 취소되었습니다.", { id: toastId });
