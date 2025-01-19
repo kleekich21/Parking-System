@@ -12,14 +12,15 @@
 
 ## 기술 스택
 
-- React 18
-- TypeScript
-- TanStack Query (React Query)
-- React Hook Form
-- Zod
-- MSW (Mock Service Worker)
-- Tailwind CSS
-- React Icons
+- 언어: TypeScript
+- 프레임워크: React
+- 상태 관리: React Query
+- 스타일링: [TailwindCSS](https://tailwindcss.com/), [react-icons](https://www.npmjs.com/package/react-icons), [react-spinners](https://www.npmjs.com/package/react-spinners), [react-hot-toast](https://react-hot-toast.com/)
+- form/validation: [react-hook-form](https://www.react-hook-form.com/) / [Zod](https://zod.dev/)
+- API Mocking: [MSW](https://mswjs.io/)
+- 라우팅: [React Router](https://reactrouter.com/)
+- 린팅: ESLint
+- 이외: [react-error-boundary](https://www.npmjs.com/package/react-error-boundary)
 
 ## 시작하기
 
@@ -35,6 +36,27 @@ npm install
 ## 개발 서버 실행
 
 npm run dev
+
+## Demo 가이드
+
+1. `npm install`로 설치
+2. `npm run dev`로 앱 시작
+
+### 주차장 id에 따른 주차장 현황 페이지
+
+http://localhost:5173/parking-lots/1
+
+http://localhost:5173/parking-lots/2
+
+### 주차장 예약 및 예약 취소
+
+**_참고: mocking된 서버이므로 parkingLotId "1"에서만 예약 및 예약 취소 가능_**
+
+http://localhost:5173/parking-lots/1
+
+### 주차면 상세페이지 접근
+
+http://localhost:5173/parking-lots/1?spot=5
 
 ## 프로젝트 구조
 
@@ -76,8 +98,8 @@ src/
 
 ## 향후 계획
 
-- [ ] query string을 통해 예약 페이지 열람 가능하도록 구현
-- [ ] 성능 최적화를 위해 Virtualized List 적용
+- [x] query string을 통해 예약 페이지 열람 가능하도록 구현
+- [ ] 주차면 렌더링을 위해 react-window 또는 react-virtualized를 활용한 Virtual Scrolling을 도입
 - [ ] 다양한 배치 형태
 - [ ] 나의 예약 페이지
 
