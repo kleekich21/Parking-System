@@ -235,7 +235,7 @@ export const parkingLot2: IParkingLot = {
       id: "ps-2-4",
       parkingSpotNumber: 4,
       status: "EMPTY",
-      parkingSpotType: "NORMAL",
+      parkingSpotType: "EV",
       evCharger: {
         chargingType: "AC",
         chargingSpeed: "SLOW",
@@ -250,7 +250,7 @@ export const parkingLot2: IParkingLot = {
       id: "ps-2-5",
       parkingSpotNumber: 5,
       status: "EMPTY",
-      parkingSpotType: "NORMAL",
+      parkingSpotType: "EV",
       evCharger: {
         chargingType: "DC_COMBO",
         chargingSpeed: "FAST",
