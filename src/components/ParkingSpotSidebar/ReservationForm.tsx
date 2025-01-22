@@ -129,7 +129,7 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
               <label className="block text-sm text-white mb-1">시작 시간</label>
               <input
                 type="datetime-local"
-                className={`w-full border rounded-md px-3 py-2 ${
+                className={`w-full border rounded-md px-3 py-2 bg-black text-white ${
                   errors.startTime ? "border-red-500" : "border-gray-300"
                 }`}
                 min={new Date().toISOString().slice(0, 16)}
@@ -145,7 +145,7 @@ function ReservationForm({ spot, onSuccess }: ReservationFormProps) {
               <label className="block text-sm text-white mb-1">종료 시간</label>
               <input
                 type="datetime-local"
-                className={`w-full border rounded-md px-3 py-2 ${
+                className={`w-full border rounded-md px-3 py-2 bg-black text-white ${
                   errors.endTime ? "border-red-500" : "border-gray-300"
                 }`}
                 min={startTime}
