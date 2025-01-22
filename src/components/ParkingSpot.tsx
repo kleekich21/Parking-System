@@ -58,25 +58,28 @@ export function ParkingSpot({
   const { parkingSpotNumber, status, parkingSpotType, evCharger } = spot;
 
   const handleClick = useCallback(async () => {
-    // 먼저 쿼리 무효화를 통해 예약 정보 업데이트 후 주차장 현황 리페치
-    await Promise.all([
-      // 간단하게 navigate 해주는 것으로 대체 가능하지만, mocking 서버로 인한 한계로 쿼리 무효화를 통해 처리
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.PARKING.ALL,
-      }),
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.RESERVATION.DETAIL(Number(parkingSpotNumber)),
-      }),
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.RESERVATION.LIST,
-      }),
-    ]);
-
     // 예약 완료 후 예약 페이지로 이동
     setSearchParams((prev) => {
       prev.set("spot", parkingSpotNumber.toString());
       return prev;
     });
+
+    // 먼저 쿼리 무효화를 통해 예약 정보 업데이트 후 주차장 현황 리페치
+    await Promise.all([
+      // 간단하게 navigate 해주는 것으로 대체 가능하지만, mocking 서버로 인한 한계로 쿼리 무효화를 통해 처리
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.PARKING.ALL,
+        type: "all",
+      }),
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.RESERVATION.DETAIL(Number(parkingSpotNumber)),
+        type: "all",
+      }),
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.RESERVATION.LIST,
+        type: "all",
+      }),
+    ]);
   }, [parkingSpotNumber, setSearchParams, queryClient]);
 
   const statusText = getStatusText(status, isReservedByCurrentUser);
