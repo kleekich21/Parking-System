@@ -1,6 +1,9 @@
-# 주차장 예약 시스템
+# Parking System(주차장 예약 시스템)
 
-실시간으로 주차면 현황을 확인하고 예약할 수 있는 웹 애플리케이션입니다.
+실시간으로 주차면 현황을 확인하고 예약할 수 있는 SPA입니다.
+query string을 통해 예약 페이지 열람이 가능하도록 구현하였습니다.
+
+![wireframe](./public/demo.png)
 
 ## 주요 기능
 
@@ -12,35 +15,27 @@
 
 ## 기술 스택
 
-- 언어: TypeScript
-- 프레임워크: React
-- 상태 관리: React Query
-- 스타일링: [TailwindCSS](https://tailwindcss.com/), [react-icons](https://www.npmjs.com/package/react-icons), [react-spinners](https://www.npmjs.com/package/react-spinners), [react-hot-toast](https://react-hot-toast.com/)
-- form/validation: [react-hook-form](https://www.react-hook-form.com/) / [Zod](https://zod.dev/)
-- API Mocking: [MSW](https://mswjs.io/)
-- 라우팅: [React Router](https://reactrouter.com/)
-- 린팅: ESLint
-- 이외: [react-error-boundary](https://www.npmjs.com/package/react-error-boundary)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white)
+![React Router](https://img.shields.io/badge/React%20Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-%23EC5990.svg?style=for-the-badge&logo=reacthookform&logoColor=white)
+![Zod](https://img.shields.io/badge/zod-%23EC5990.svg?style=for-the-badge&logo=zod&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![MSW](https://img.shields.io/badge/MSW-000000?style=for-the-badge&logo=msw&logoColor=white)
+![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
 
-## 시작하기
+## Demo 가이드
 
 ### 필수 조건
 
 - Node.js 18.0.0 이상
 - npm 9.0.0 이상
 
-### 설치
+### 프로젝트 인스톨 및 개발 서버 실행
 
-npm install
-
-## 개발 서버 실행
-
-npm run dev
-
-## Demo 가이드
-
-1. `npm install`로 설치
-2. `npm run dev`로 앱 시작
+1. `npm install`로 프로젝트 인스톨
+2. `npm run dev`로 개발 서버 실행
 
 ### 주차장 id에 따른 주차장 현황 페이지
 
@@ -50,8 +45,6 @@ http://localhost:5173/parking-lots/2
 
 ### 주차장 예약 및 예약 취소
 
-**_참고: mocking된 서버이므로 parkingLotId "1"에서만 예약 및 예약 취소 가능_**
-
 http://localhost:5173/parking-lots/1
 
 ### 주차면 상세페이지 접근
@@ -60,6 +53,7 @@ http://localhost:5173/parking-lots/1?spot=5
 
 ## 프로젝트 구조
 
+```
 src/
 ├── api/ # API 관련 함수
 ├── components/ # React 컴포넌트
@@ -68,6 +62,7 @@ src/
 ├── mocks/ # MSW 모의 데이터 및 핸들러
 ├── types/ # TypeScript 타입 정의
 └── utils/ # 유틸리티 함수
+```
 
 ## 주요 컴포넌트
 
